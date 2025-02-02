@@ -1,0 +1,43 @@
+@import '../../variables.scss';
+
+@keyframes rotate {
+    from {
+        transform: rotate(-360deg);
+    }
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100vh;
+    width: 100%;
+}
+
+.app__spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+
+    :first-child {
+        display: flex;
+        width: 200px;
+        height: 200px;
+        animation: rotate 1s linear infinite;
+    }
+}
+
+.app__error-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    @include title-text;
+    font-size: 40px;
+    color: $aqua;
+    text-align: center;
+}
