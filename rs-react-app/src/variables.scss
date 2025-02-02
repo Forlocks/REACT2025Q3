@@ -1,0 +1,16 @@
+$aqua: #63f5ff;
+$aqua-focus: #004747;
+$gray: #414040;
+$gray-focus: #272727;
+
+@mixin text {
+  font-family: 'Prototype', sans-serif;
+  letter-spacing: 1px;
+  color: $aqua;
+}
+
+@mixin title-text {
+  font-family: 'Prototype', sans-serif;
+  letter-spacing: 0px;
+  color: $aqua;
+}
