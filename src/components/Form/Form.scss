@@ -1,0 +1,13 @@
+.form {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 550px) {
+  .form {
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
