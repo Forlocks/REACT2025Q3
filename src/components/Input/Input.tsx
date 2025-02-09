@@ -1,28 +1,30 @@
-import { ChangeEvent, Component } from 'react';
+import React from 'react';
 import './Input.scss';
 
 interface InputProps {
   inputValue: string;
-  onInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSearch: () => void;
 }
 
-export class Input extends Component<InputProps> {
-  handleEnterKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+export const Input: React.FC<InputProps> = ({
+  inputValue,
+  onInputChange,
+  onSearch,
+}) => {
+  const handleEnterKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      this.props.onSearch();
+      onSearch();
     }
   };
 
-  render() {
-    return (
-      <input
-        className="input"
-        placeholder="Ship name"
-        value={this.props.inputValue}
-        onChange={this.props.onInputChange}
-        onKeyDown={this.handleEnterKeyDown}
-      />
-    );
-  }
-}
+  return (
+    <input
+      className="input"
+      placeholder="Ship name"
+      value={inputValue}
+      onChange={onInputChange}
+      onKeyDown={handleEnterKeyDown}
+    />
+  );
+};

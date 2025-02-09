@@ -1,39 +1,40 @@
-import { ChangeEvent, Component } from 'react';
+import React, { useState } from 'react';
 import { Form } from '../Form/Form';
 import { Button } from '../Button/Button';
-import { ErrorStatus } from '../ErrorBoundary/ErrorBoundary';
 import './Header.scss';
 
 interface HeaderProps {
   inputValue: string;
-  onInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSearch: () => void;
 }
 
-export class Header extends Component<HeaderProps> {
-  state: ErrorStatus = { hasError: false };
+export const Header: React.FC<HeaderProps> = ({
+  inputValue,
+  onInputChange,
+  onSearch,
+}) => {
+  const [hasError, setHasError] = useState(false);
 
-  handleError = () => {
-    this.setState({ hasError: true });
+  const handleError = () => {
+    setHasError(true);
   };
 
-  render() {
-    if (this.state.hasError) {
-      throw new Error('Custom error');
-    }
-
-    return (
-      <div className="header">
-        <div className="header__title">Star Trek Ships</div>
-        <div className="header__right-bar">
-          <Form
-            inputValue={this.props.inputValue}
-            onInputChange={this.props.onInputChange}
-            onSearch={this.props.onSearch}
-          />
-          <Button onButtonClick={this.handleError}>Get error</Button>
-        </div>
-      </div>
-    );
+  if (hasError) {
+    throw new Error('Custom error');
   }
-}
+
+  return (
+    <div className="header">
+      <div className="header__title">Star Trek Ships</div>
+      <div className="header__right-bar">
+        <Form
+          inputValue={inputValue}
+          onInputChange={onInputChange}
+          onSearch={onSearch}
+        />
+        <Button onButtonClick={handleError}>Get error</Button>
+      </div>
+    </div>
+  );
+};

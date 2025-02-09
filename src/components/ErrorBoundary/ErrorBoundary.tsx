@@ -5,7 +5,7 @@ interface ErrorBoundaryProps {
   children: ReactNode;
 }
 
-export interface ErrorStatus {
+interface ErrorStatus {
   hasError: boolean;
 }
 

@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React from 'react';
 import './Button.scss';
 
 interface ButtonProps {
@@ -6,12 +6,10 @@ interface ButtonProps {
   onButtonClick: () => void;
 }
 
-export class Button extends Component<ButtonProps> {
-  render() {
-    return (
-      <button className="button" onClick={this.props.onButtonClick}>
-        {this.props.children}
-      </button>
-    );
-  }
-}
+export const Button: React.FC<ButtonProps> = ({ children, onButtonClick }) => {
+  return (
+    <button className="button" onClick={onButtonClick}>
+      {children}
+    </button>
+  );
+};
