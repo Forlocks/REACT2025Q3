@@ -1,31 +1,19 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
+import { useShipLoader } from '../../hooks/useShipLoader';
 import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary';
 import { Header } from '../Header/Header';
 import { CardsContainer } from '../CardsContainer/CardsContainer';
-import { getShips } from '../../controllers/getShips';
-import { Ship } from '../../models/Ship';
 import './App.scss';
 import spinner from '../../assets/images/spinner.webp';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 export const App: React.FC = () => {
-  const [inputValue, setInputValue] = useLocalStorage('STS last request');
-  const [ships, setShips] = useState<Ship[] | null>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSearch = useCallback(
-    async (searchValue: string = inputValue) => {
-      setIsLoading(true);
-      const shipResults = await getShips(searchValue.trim());
-      setShips(shipResults);
-      setIsLoading(false);
-    },
-    [inputValue]
-  );
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-  };
+  const {
+    inputValue,
+    handleInputChange,
+    handleSearch,
+    isLoading,
+    ships,
+  } = useShipLoader();
 
   let content;
 
@@ -55,7 +43,7 @@ export const App: React.FC = () => {
         <Header
           inputValue={inputValue}
           onInputChange={handleInputChange}
-          onSearch={() => handleSearch(inputValue)}
+          onSearch={() => handleSearch()}
         />
         {content}
       </div>
