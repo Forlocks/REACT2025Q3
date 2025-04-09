@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useShipLoader } from '../../hooks/useShipLoader';
 import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary';
 import { Header } from '../Header/Header';
 import { CardsContainer } from '../CardsContainer/CardsContainer';
+import { Pagination } from '../Pagination/Pagination';
+import { PageContext } from '../../providers/Page/PageContext';
 import './App.scss';
 import spinner from '../../assets/images/spinner.webp';
 
 export const App: React.FC = () => {
+  const { currentPage } = useContext(PageContext);
   const {
     inputValue,
     handleInputChange,
     handleSearch,
     isLoading,
     ships,
-  } = useShipLoader();
+    pageCount,
+  } = useShipLoader(currentPage);
 
   let content;
 
@@ -46,6 +50,7 @@ export const App: React.FC = () => {
           onSearch={() => handleSearch()}
         />
         {content}
+        <Pagination pageCount={pageCount} />
       </div>
     </ErrorBoundary>
   );

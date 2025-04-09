@@ -2,17 +2,19 @@ import { useState, useEffect } from 'react';
 import { getShips } from '../controllers/getShips';
 import { Ship } from '../models/Ship';
 
-export function useShipLoader(initialQuery: string = '') {
-  const [inputValue, setInputValue] = useState(initialQuery);
+export function useShipLoader(currentPage: number) {
+  const [inputValue, setInputValue] = useState('');
   const [ships, setShips] = useState<Ship[] | null>([]);
+  const [pageCount, setPageCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSearch = async (searchValue: string = inputValue) => {
     setIsLoading(true);
 
-    const shipResults = await getShips(searchValue.trim());
+    const shipResults = await getShips(searchValue.trim(), currentPage - 1);
 
-    setShips(shipResults);
+    setPageCount(shipResults?.totalPages);
+    setShips(shipResults?.spacecrafts);
     setIsLoading(false);
   };
 
@@ -20,9 +22,10 @@ export function useShipLoader(initialQuery: string = '') {
     async function loadCards(query: string) {
       setIsLoading(true);
 
-      const shipResults = await getShips(query);
+      const shipResults = await getShips(query, currentPage - 1);
 
-      setShips(shipResults);
+      setPageCount(shipResults?.totalPages);
+      setShips(shipResults?.spacecrafts);
       setIsLoading(false);
     }
 
@@ -30,7 +33,7 @@ export function useShipLoader(initialQuery: string = '') {
 
     setInputValue(lastRequest);
     loadCards(lastRequest);
-  }, []);
+  }, [currentPage]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -42,5 +45,6 @@ export function useShipLoader(initialQuery: string = '') {
     handleSearch,
     isLoading,
     ships,
+    pageCount,
   };
 }
