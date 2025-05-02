@@ -1,15 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useParams } from 'react-router';
+import { Routes, Route } from "react-router";
 import { useShipLoader } from '../../hooks/useShipLoader';
 import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary';
 import { Header } from '../Header/Header';
 import { CardsContainer } from '../CardsContainer/CardsContainer';
 import { Pagination } from '../Pagination/Pagination';
-import { PageContext } from '../../providers/Page/PageContext';
 import './App.scss';
 import spinner from '../../assets/images/spinner.webp';
 
 export const App: React.FC = () => {
-  const { currentPage } = useContext(PageContext);
+  const { page } = useParams<{page: string}>();
+  const currentPage = page ? +page : 1;
   const {
     inputValue,
     handleInputChange,
@@ -36,7 +38,11 @@ export const App: React.FC = () => {
       </div>
     );
   } else if (ships.length) {
-    content = <CardsContainer ships={ships} />;
+    content = (
+      <Routes>
+        <Route path="/" element={<CardsContainer ships={ships} />}/>
+      </Routes>
+    );
   } else {
     content = <div className="app__error-message">No results found</div>;
   }

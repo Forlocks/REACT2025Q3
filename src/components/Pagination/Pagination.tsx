@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../Button/Button';
-import { PageContext } from '../../providers/Page/PageContext';
 import './Pagination.scss';
+import { Link, useParams } from 'react-router';
 
 interface PaginationProps {
   pageCount: number;
@@ -10,7 +10,8 @@ interface PaginationProps {
 export const Pagination: React.FC<PaginationProps> = ({ pageCount }) => {
   const [isPaginationVisible, setIsPaginationVisible] = useState(false);
   const [availablePages, setAvailablePages] = useState<number[]>([]);
-  const { currentPage, setCurrentPage } = useContext(PageContext);
+  const { page } = useParams<{page: string}>();
+  const currentPage = page ? +page : 1;
 
   useEffect(() => {
       const pages = Array.from(
@@ -18,55 +19,50 @@ export const Pagination: React.FC<PaginationProps> = ({ pageCount }) => {
         (_, index) => index + 1,
       );
 
-      setCurrentPage(1);
       setAvailablePages(pages);
       setIsPaginationVisible(pageCount > 0);
-  }, [pageCount, setCurrentPage]);
-
-  const handleChoosePage = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  }
+  }, [pageCount, currentPage]);
 
   const handlePreviousPage = () => {
     if ((currentPage - 1) < availablePages[0]) {
       setAvailablePages(availablePages.map(pageNumber => pageNumber - 1));
     }
-
-    setCurrentPage(currentPage - 1);
   }
 
   const handleNextPage = () => {
     if ((currentPage + 1) > availablePages[availablePages.length - 1]) {
       setAvailablePages(availablePages.map(pageNumber => pageNumber + 1));
     }
-
-    setCurrentPage(currentPage + 1);
   }
 
   let content;
 
   if (isPaginationVisible) {
     const paginationButtons = availablePages.map(pageNumber => (
-      <Button
-        key={pageNumber}
-        onButtonClick={() => handleChoosePage(pageNumber)}
-        isCurrentButton={pageNumber === currentPage}
-      >
-        {pageNumber}
-      </Button>
+      <Link key={pageNumber} to={`/${pageNumber}`}>
+        <Button
+          isCurrentButton={pageNumber === currentPage}
+        >
+          {pageNumber}
+        </Button>
+      </Link>
     ));
 
     content = (
       <>
-        <Button onButtonClick={handlePreviousPage} isDisabled={currentPage === 1}>
-          &#60;
-        </Button>
+        <Link to={`/${currentPage - 1}`}>
+          <Button onButtonClick={handlePreviousPage} isDisabled={currentPage === 1}>
+            &#60;
+          </Button>
+        </Link>
         <div className="pagination__pages">
           {paginationButtons}
         </div>
-        <Button onButtonClick={handleNextPage} isDisabled={currentPage === pageCount}>
-          &#62;
-        </Button>
+        <Link to={`/${currentPage + 1}`}>
+          <Button onButtonClick={handleNextPage} isDisabled={currentPage === pageCount}>
+            &#62;
+          </Button>
+        </Link>
       </>
     );
   } else {
