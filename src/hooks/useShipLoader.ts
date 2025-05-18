@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { getShips } from '../controllers/getShips';
 import { Ship } from '../models/Ship';
 
 export function useShipLoader(currentPage: number) {
   const [inputValue, setInputValue] = useState('');
   const [ships, setShips] = useState<Ship[] | null>([]);
-  const [pageCount, setPageCount] = useState(0);
+  const [pageCount, setPageCount] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSearch = async (searchValue: string = inputValue) => {
+    navigate('/1');
     setIsLoading(true);
 
     const shipResults = await getShips(searchValue.trim(), currentPage - 1);

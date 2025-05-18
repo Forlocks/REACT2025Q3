@@ -1,77 +1,75 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../Button/Button';
 import './Pagination.scss';
-import { Link, useParams } from 'react-router';
+import { Link, useLocation, useParams } from 'react-router';
 
 interface PaginationProps {
   pageCount: number;
 }
 
 export const Pagination: React.FC<PaginationProps> = ({ pageCount }) => {
-  const [isPaginationVisible, setIsPaginationVisible] = useState(false);
-  const [availablePages, setAvailablePages] = useState<number[]>([]);
+  const [isPaginationVisible, setIsPaginationVisible] = useState(pageCount > 0);
+  const [visiblePages, setVisiblePages] = useState<number[]>([]);
   const { page } = useParams<{page: string}>();
+  const location = useLocation();
   const currentPage = page ? +page : 1;
 
   useEffect(() => {
-      const pages = Array.from(
-        {length: pageCount > 4 ? 4 : pageCount},
-        (_, index) => index + 1,
-      );
-
-      setAvailablePages(pages);
-      setIsPaginationVisible(pageCount > 0);
-  }, [pageCount, currentPage]);
-
-  const handlePreviousPage = () => {
-    if ((currentPage - 1) < availablePages[0]) {
-      setAvailablePages(availablePages.map(pageNumber => pageNumber - 1));
+    if (currentPage < 1 || currentPage > pageCount) {
+      throw new Error('Error in search request');
     }
-  }
 
-  const handleNextPage = () => {
-    if ((currentPage + 1) > availablePages[availablePages.length - 1]) {
-      setAvailablePages(availablePages.map(pageNumber => pageNumber + 1));
+    setIsPaginationVisible(true);
+
+    if (pageCount <= 4) {
+      setVisiblePages(Array.from({ length: pageCount }, (_, i) => i + 1));
+      return;
     }
-  }
 
-  let content;
+    if (!location.state?.fromPagination) {
+      setVisiblePages(Array.from({ length: 4 }, (_, i) => currentPage + i));
+    } else {
+      setVisiblePages(prevPages => {
+        const newVisiblePages = [...prevPages];
 
-  if (isPaginationVisible) {
-    const paginationButtons = availablePages.map(pageNumber => (
-      <Link key={pageNumber} to={`/${pageNumber}`}>
-        <Button
-          isCurrentButton={pageNumber === currentPage}
-        >
-          {pageNumber}
-        </Button>
-      </Link>
-    ));
+        if (currentPage > prevPages[3]) {
+          return newVisiblePages.map((page) => page + 1);
+        }
 
-    content = (
-      <>
-        <Link to={`/${currentPage - 1}`}>
-          <Button onButtonClick={handlePreviousPage} isDisabled={currentPage === 1}>
-            &#60;
-          </Button>
-        </Link>
-        <div className="pagination__pages">
-          {paginationButtons}
-        </div>
-        <Link to={`/${currentPage + 1}`}>
-          <Button onButtonClick={handleNextPage} isDisabled={currentPage === pageCount}>
-            &#62;
-          </Button>
-        </Link>
-      </>
-    );
-  } else {
-    content = null;
+        if (currentPage < prevPages[0]) {
+          return newVisiblePages.map((page) => page - 1);
+        }
+
+        return newVisiblePages;
+      });
+    }
+  }, [pageCount, currentPage, location]);
+
+  if (!isPaginationVisible) {
+    return null;
   }
 
   return (
     <div className="pagination">
-      {content}
+      <Link to={`/${currentPage - 1}`} state={{ fromPagination: true }}>
+        <Button isDisabled={currentPage === 1}>
+          &#60;
+        </Button>
+      </Link>
+      <div className="pagination__pages">
+        {visiblePages.map(pageNumber => (
+          <Link key={pageNumber} to={`/${pageNumber}`} state={{ fromPagination: true }}>
+            <Button isCurrentButton={pageNumber === currentPage}>
+              {pageNumber}
+            </Button>
+          </Link>
+        ))}
+      </div>
+      <Link to={`/${currentPage + 1}`} state={{ fromPagination: true }}>
+        <Button isDisabled={currentPage === pageCount}>
+          &#62;
+        </Button>
+      </Link>
     </div>
   );
 }

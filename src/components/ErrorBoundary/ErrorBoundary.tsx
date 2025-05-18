@@ -26,7 +26,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps> {
             <a className="error-message__link" href={window.location.href}>
               reload
             </a>
-            &nbsp;this page
+            &nbsp;this page or change page in URL
           </div>
         </div>
       );
