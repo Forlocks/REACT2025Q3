@@ -6,7 +6,7 @@ import { Ship } from '../models/Ship';
 export function useShipLoader(currentPage: number) {
   const [inputValue, setInputValue] = useState('');
   const [ships, setShips] = useState<Ship[] | null>([]);
-  const [pageCount, setPageCount] = useState();
+  const [pageCount, setPageCount] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
