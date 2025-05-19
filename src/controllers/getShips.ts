@@ -1,4 +1,4 @@
-export async function getShips(key: string, page: number) {
+export async function getShips(key: string, page: number, controller: AbortController) {
   const PAGE_SIZE: number = 15;
   const API_URL: string = 'https://stapi.co/api/v1/rest/spacecraft/search';
 
@@ -10,6 +10,7 @@ export async function getShips(key: string, page: number) {
       'Content-type': 'application/x-www-form-urlencoded',
     },
     body: requestBody,
+    signal: controller?.signal,
   };
 
   localStorage.setItem('STS last request', key);
@@ -22,7 +23,9 @@ export async function getShips(key: string, page: number) {
         spacecrafts: data.spacecrafts,
         totalPages: data.page.totalPages,
     };
-  } catch {
-    return null;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error; 
+    }
   }
 }
