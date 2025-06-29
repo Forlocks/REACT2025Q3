@@ -25,8 +25,8 @@ export const Header: React.FC<HeaderProps> = ({
   }
 
   return (
-    <div className="header">
-      <div className="header__title">Star Trek Ships</div>
+    <header className="header">
+      <a className="header__title" href="/">Star Trek Ships</a>
       <div className="header__right-bar">
         <Form
           inputValue={inputValue}
@@ -35,6 +35,6 @@ export const Header: React.FC<HeaderProps> = ({
         />
         <Button onButtonClick={handleError}>Get error</Button>
       </div>
-    </div>
+    </header>
   );
 };

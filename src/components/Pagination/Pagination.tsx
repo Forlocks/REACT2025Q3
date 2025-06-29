@@ -52,7 +52,7 @@ export const Pagination: React.FC<PaginationProps> = ({ pageCount }) => {
   }
 
   return (
-    <div className="pagination">
+    <footer className="pagination">
       <Link to={`/${currentPage - 1}`} state={{ fromPagination: true }}>
         <Button isDisabled={currentPage === 1}>
           &#60;
@@ -72,6 +72,6 @@ export const Pagination: React.FC<PaginationProps> = ({ pageCount }) => {
           &#62;
         </Button>
       </Link>
-    </div>
+    </footer>
   );
 }

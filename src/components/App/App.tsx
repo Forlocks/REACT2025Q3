@@ -1,25 +1,37 @@
 import React from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import { Routes, Route } from "react-router";
 import { useShipLoader } from '../../hooks/useShipLoader';
+import { DetailsLayout } from '../../layouts/DetailsLayout/DetailsLayout';
 import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary';
 import { Header } from '../Header/Header';
 import { CardsContainer } from '../CardsContainer/CardsContainer';
 import { Pagination } from '../Pagination/Pagination';
+import { NotFoundError } from '../NotFoundError/NotFoundError';
 import './App.scss';
 import spinner from '../../assets/images/spinner.webp';
 
 export const App: React.FC = () => {
+  const navigate = useNavigate();
   const { page } = useParams<{page: string}>();
   const currentPage = page ? +page : 1;
+
   const {
     inputValue,
-    handleInputChange,
-    handleSearch,
     isLoading,
     ships,
     pageCount,
+    handleInputChange,
+    handleSearch,
   } = useShipLoader(currentPage);
+
+  if (isNaN(currentPage)) {
+    return <NotFoundError />
+  }
+  
+  if (!page) {
+    navigate("/1");
+  }
 
   let content;
 
@@ -33,14 +45,16 @@ export const App: React.FC = () => {
     );
   } else if (isLoading) {
     content = (
-      <div className="app__spinner">
+      <div className="details__spinner">
         <img src={spinner} alt="Loading spinner" />
       </div>
     );
   } else if (ships.length) {
     content = (
       <Routes>
-        <Route path="/" element={<CardsContainer ships={ships} />}/>
+        <Route path="/" element={<DetailsLayout />}>
+          <Route index element={<CardsContainer ships={ships} />}/>
+        </Route>
       </Routes>
     );
   } else {

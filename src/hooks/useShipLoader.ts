@@ -11,24 +11,6 @@ export function useShipLoader(currentPage: number) {
   const abortControllerRef = useRef<AbortController | null>(null);
   const navigate = useNavigate();
 
-  const handleSearch = async (searchValue: string = inputValue) => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    navigate('/1');
-    setIsLoading(true);
-
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
-    const shipResults = await getShips(searchValue.trim(), currentPage - 1, controller);
-    setPageCount(shipResults?.totalPages);
-    setShips(shipResults?.spacecrafts);
-
-    setIsLoading(false);
-  };
-
   useEffect(() => {
     async function loadCards(query: string) {
       if (abortControllerRef.current) {
@@ -59,16 +41,34 @@ export function useShipLoader(currentPage: number) {
     };
   }, [currentPage]);
 
+  const handleSearch = async (searchValue: string = inputValue) => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    navigate('/1');
+    setIsLoading(true);
+
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    const shipResults = await getShips(searchValue.trim(), currentPage - 1, controller);
+    setPageCount(shipResults?.totalPages);
+    setShips(shipResults?.spacecrafts);
+
+    setIsLoading(false);
+  };
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
 
   return {
     inputValue,
-    handleInputChange,
-    handleSearch,
     isLoading,
     ships,
     pageCount,
+    handleInputChange,
+    handleSearch,
   };
 }

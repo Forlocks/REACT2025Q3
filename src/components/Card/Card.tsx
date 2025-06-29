@@ -1,7 +1,9 @@
 import React from 'react';
+import { useSearchParams } from 'react-router';
 import './Card.scss';
 
 interface CardProps {
+  classId: string | undefined;
   name: string;
   registry: string;
   status: string;
@@ -12,6 +14,7 @@ interface CardProps {
 }
 
 export const Card: React.FC<CardProps> = ({
+  classId,
   name,
   registry,
   status,
@@ -20,35 +23,44 @@ export const Card: React.FC<CardProps> = ({
   owner,
   operator,
 }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleClick = async () => {
+    const newSearchParams = new URLSearchParams(searchParams);
+
+    newSearchParams.set('details', classId || 'empty');
+    setSearchParams(newSearchParams);
+  }
+
   return (
-    <div className="card">
+    <div className="card" onClick={handleClick}>
       <div className="card__name">{name}</div>
-      <div className="card__description">
-        <div className="card__property">
+      <ul className="card__description">
+        <li className="card__property">
           <span>Registry:</span>
           <span>{registry}</span>
-        </div>
-        <div className="card__property">
+        </li>
+        <li className="card__property">
           <span>Status:</span>
           <span>{status}</span>
-        </div>
-        <div className="card__property">
+        </li>
+        <li className="card__property">
           <span>Date status:</span>
           <span>{dateStatus}</span>
-        </div>
-        <div className="card__property">
+        </li>
+        <li className="card__property">
           <span>Class:</span>
           <span>{shipClass}</span>
-        </div>
-        <div className="card__property">
+        </li>
+        <li className="card__property">
           <span>Owner:</span>
           <span>{owner}</span>
-        </div>
-        <div className="card__property">
+        </li>
+        <li className="card__property">
           <span>Operator:</span>
           <span>{operator}</span>
-        </div>
-      </div>
+        </li>
+      </ul>
     </div>
   );
 };

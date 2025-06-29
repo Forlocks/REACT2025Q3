@@ -1,4 +1,9 @@
-export function deleteTags(value: string) {
+export function deleteTags(value: string | undefined | null) {
   const regExp = /<.*?>/g;
-  return value.replace(regExp, '');
+
+  if (!value) {
+    return '';
+  }
+
+  return value.toString().replace(regExp, '');
 }

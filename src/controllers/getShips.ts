@@ -25,7 +25,7 @@ export async function getShips(key: string, page: number, controller: AbortContr
     };
   } catch (error) {
     if (error instanceof Error) {
-      throw error; 
+      throw error;
     }
   }
 }
