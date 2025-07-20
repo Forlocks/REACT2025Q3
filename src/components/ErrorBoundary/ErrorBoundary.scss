@@ -1,0 +1,27 @@
+@import '../../variables.scss';
+
+.error-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+  @include title-text;
+  font-size: 40px;
+  color: $aqua;
+}
+
+.error-message__link {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: text-underline-offset 0.1s ease;
+  color: $aqua;
+
+  &:hover {
+    text-underline-offset: 5px;
+    transition: text-underline-offset 0.1s ease;
+  }
+}
