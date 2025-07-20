@@ -14,7 +14,7 @@
     "prepare": "husky && echo npm run lint-staged > .husky/pre-commit",
     "lint-staged": "lint-staged",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
