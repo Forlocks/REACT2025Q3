@@ -86,3 +86,21 @@ body {
 	font-family: 'Prototype';
 	src: url('./assets/fonts/Prototype.ttf');
 }
+
+@keyframes rotate {
+    from {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes shadowPulse {
+  0% {
+    box-shadow: 0px 10px 15px rgba(94, 245, 255, 1);
+  }
+  50% {
+    box-shadow: 0px 10px 15px rgba(94, 245, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0px 10px 15px rgba(94, 245, 255, 1);
+  }
+}

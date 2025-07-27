@@ -4,16 +4,12 @@ export interface Ship {
   registry: string | null;
   status: string | null;
   dateStatus: string | null;
-  class: NestedShipProperty | null;
+  spacecraftClass: NestedShipProperty | null;
   owner: NestedShipProperty | null;
   operator: NestedShipProperty | null;
 }
 
-export interface NestedShipProperty {
+interface NestedShipProperty {
   uid: string;
   name: string;
-}
-
-export interface ShipsApiResponse {
-  spacecrafts: Ship[];
 }
