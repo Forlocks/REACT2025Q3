@@ -1,8 +1,8 @@
 import React from 'react';
-import './NotFoundError.scss';
+import './NotFoundPage.scss';
 import brokenShip from '../../assets/images/not-found.webp';
 
-export const NotFoundError: React.FC = () => {
+export const NotFoundPage: React.FC = () => {
   return (
     <div className="not-found">
       <img className="not-found__image" src={brokenShip} alt="Broken ship" />

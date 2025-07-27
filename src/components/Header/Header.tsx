@@ -1,21 +1,15 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router';
-import { Form } from '../Form/Form';
+import { NavLink, useLocation } from 'react-router';
 import { Button } from '../Button/Button';
 import './Header.scss';
 
 interface HeaderProps {
-  inputValue: string;
-  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onSearch: () => void;
+  children?: React.ReactNode;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-  inputValue,
-  onInputChange,
-  onSearch,
-}) => {
+export const Header: React.FC<HeaderProps> = ({ children }) => {
   const [hasError, setHasError] = useState(false);
+  const location = useLocation();
 
   const handleError = () => {
     setHasError(true);
@@ -29,13 +23,13 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="header">
       <a className="header__title" href="/">Star Trek Ships</a>
       <div className="header__right-bar">
-        <Form
-          inputValue={inputValue}
-          onInputChange={onInputChange}
-          onSearch={onSearch}
-        />
+        {children}
         <Button onButtonClick={handleError}>Get error</Button>
-        <NavLink to="/about-us" className="header__about-us">About us</NavLink>
+        {location.pathname === '/about' ? (
+          <NavLink to="/" className="header__nav-link">Main</NavLink>
+        ) : (
+          <NavLink to="/about" className="header__nav-link">About us</NavLink>
+        )}
       </div>
     </header>
   );

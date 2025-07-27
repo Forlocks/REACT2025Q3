@@ -18,7 +18,7 @@
   display: block;
   @include title-text;
   font-size: 40px;
-  width: 400px;
+  white-space: nowrap;
 }
 
 .header__right-bar {
@@ -28,7 +28,7 @@
   width: 100%;
 }
 
-.header__about-us {
+.header__nav-link {
   margin-left: auto;
   @include text;
   font-size: 24px;
@@ -50,5 +50,13 @@
     justify-content: center;
     gap: 15px;
     min-height: 137px;
+  }
+
+  .header__right-bar {
+    justify-content: center;
+  }
+
+  .header__about-us {
+    margin-left: 0;
   }
 }
