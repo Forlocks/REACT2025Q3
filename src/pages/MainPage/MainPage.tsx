@@ -1,6 +1,5 @@
 import React from 'react';
-import { useParams, useLocation, Navigate } from 'react-router';
-import { Routes, Route } from "react-router";
+import { useParams, useLocation, Navigate, Routes, Route } from 'react-router-dom';
 import { useShipLoader } from '../../hooks/useShipLoader';
 import { DetailsLayout } from '../../layouts/DetailsLayout/DetailsLayout';
 import { Header } from '../../components/Header/Header';

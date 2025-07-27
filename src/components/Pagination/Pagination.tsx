@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../Button/Button';
 import './Pagination.scss';
-import { Link, useLocation, useParams } from 'react-router';
+import { Link, useLocation, useParams } from 'react-router-dom';
 
 interface PaginationProps {
   pageCount: number;

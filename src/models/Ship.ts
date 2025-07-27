@@ -9,7 +9,11 @@ export interface Ship {
   operator: NestedShipProperty | null;
 }
 
-interface NestedShipProperty {
+export interface NestedShipProperty {
   uid: string;
   name: string;
+}
+
+export interface ShipsApiResponse {
+  spacecrafts: Ship[];
 }
