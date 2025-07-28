@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.49% </span>
+                <span class="strong">95.38% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>55/57</span>
+                <span class='fraction'>62/65</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.5% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/8</span>
+                <span class='fraction'>9/10</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.49% </span>
+                <span class="strong">95.38% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>55/57</span>
+                <span class='fraction'>62/65</span>
             </div>
         
             
@@ -137,7 +137,13 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -152,19 +158,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -225,34 +237,40 @@ export function useShipLoader(currentPage: number) {
   const navigate = useNavigate();
 &nbsp;
   useEffect(() =&gt; {
-    async function loadCards(query: string) {
-      if (abortControllerRef.current) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >        abortControllerRef.current.abort();</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
+  const controller = new AbortController();
+  abortControllerRef.current = controller;
 &nbsp;
-      setIsLoading(true);
+  const loadCards = async (query: string) =&gt; {
+    setIsLoading(true);
 &nbsp;
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
-&nbsp;
+    try {
       const shipResults = await getShips(query, currentPage - 1, controller);
-      setPageCount(shipResults?.totalPages);
-      setShips(shipResults?.spacecrafts);
-&nbsp;
-      setIsLoading(false);
-    }
-&nbsp;
-    const lastRequest = localStorage.getItem('STS last request') || '';
-&nbsp;
-    setInputValue(lastRequest);
-    loadCards(lastRequest);
-&nbsp;
-    return () =&gt; {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
+      if (!controller.signal.aborted) {
+        setPageCount(shipResults?.totalPages);
+        setShips(shipResults?.spacecrafts);
       }
-    };
-  }, [currentPage]);
+<span class="branch-0 cbranch-no" title="branch not covered" >    } catch (error) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!controller.signal.aborted &amp;&amp; error instanceof Error) {</span>
+<span class="cstat-no" title="statement not covered" >        setShips(null);</span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+    } finally {
+      if (!controller.signal.aborted) {
+        setIsLoading(false);
+      }
+    }
+  };
+&nbsp;
+  const lastRequest = localStorage.getItem('STS last request') || '';
+&nbsp;
+  setInputValue(lastRequest);
+  loadCards(lastRequest);
+&nbsp;
+  return () =&gt; {
+    if (!abortControllerRef.current?.signal.aborted) {
+      abortControllerRef.current?.abort();
+    }
+  };
+}, [currentPage]);
 &nbsp;
   const handleSearch = async (searchValue: string = inputValue) =&gt; {
     if (abortControllerRef.current) {
@@ -292,7 +310,7 @@ export function useShipLoader(currentPage: number) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-28T06:30:10.627Z
+                at 2025-07-28T10:10:35.023Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

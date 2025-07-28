@@ -1,12 +1,22 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { NotFoundPage } from './NotFoundPage';
 
 describe('NotFoundPage', () => {
-  it('renders 404 message and link', () => {
-    render(<NotFoundPage />);
-    expect(screen.getByText(/404 Page not found/i)).toBeInTheDocument();
+  it('renders correctly', () => {
+    render(
+      <MemoryRouter>
+        <NotFoundPage />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('404 Page not found')).toBeInTheDocument();
     expect(screen.getByAltText('Broken ship')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /main page/i })).toHaveAttribute('href', '/');
+
+    const link = screen.getByRole('link', { name: /main page/i });
+
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', '/');
   });
 });
