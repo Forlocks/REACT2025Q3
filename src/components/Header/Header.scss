@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables.scss' as vars;
 
 .header {
   display: flex;
@@ -9,14 +9,14 @@
   min-height: 96px;
   padding: 16px;
   top: 0;
-  background-color: $gray;
-  box-shadow: 0px 5px 5px $aqua;
+  background-color: vars.$gray;
+  box-shadow: 0px 5px 5px vars.$aqua;
   z-index: 10;
 }
 
 .header__title {
   display: block;
-  @include title-text;
+  @include vars.title-text;
   font-size: 40px;
   white-space: nowrap;
 }
@@ -30,7 +30,7 @@
 
 .header__nav-link {
   margin-left: auto;
-  @include text;
+  @include vars.text;
   font-size: 24px;
   white-space: nowrap;
   text-decoration: underline;

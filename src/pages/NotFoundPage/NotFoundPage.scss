@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables.scss' as vars;
 
 .not-found {
   display: flex;
@@ -24,9 +24,9 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  @include title-text;
+  @include vars.title-text;
   font-size: 40px;
-  color: $aqua;
+  color: vars.$aqua;
   text-align: center;
 }
 
@@ -34,7 +34,7 @@
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: text-underline-offset 0.1s ease;
-  color: $aqua;
+  color: vars.$aqua;
 
   &:hover {
     text-underline-offset: 5px;

@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables.scss' as vars;
 
 .main {
   display: flex;
@@ -15,9 +15,9 @@
   right: -375px;
   width: 360px;
   height: calc(100% - 96px - 60px);
-  border-left: 3px solid $aqua;
-  background-color: $gray-focus;
-  box-shadow: 10px 0px 10px 15px $aqua;
+  border-left: 3px solid vars.$aqua;
+  background-color: vars.$gray-focus;
+  box-shadow: 10px 0px 10px 15px vars.$aqua;
   transition: right 0.5s ease;
   z-index: 5;
 }
@@ -33,14 +33,14 @@
   align-items: center;
   width: 30px;
   height: 120px;
-  border-top: 3px solid $aqua;
-  border-right: 3px solid $aqua;
-  border-bottom: 3px solid $aqua;
+  border-top: 3px solid vars.$aqua;
+  border-right: 3px solid vars.$aqua;
+  border-bottom: 3px solid vars.$aqua;
   border-top-right-radius: 25px;
   border-bottom-right-radius: 25px;
-  @include text;
+  @include vars.text;
   font-size: 30px;
-  background-color: $aqua-focus;
+  background-color: vars.$aqua-focus;
   transition: background-color 0.2s ease,
                 border-color 0.2s ease,
                 color 0.2s ease,
@@ -48,7 +48,7 @@
 
   &:hover {
     cursor: pointer;
-    box-shadow: 0px 0px 10px 3px $aqua;
+    box-shadow: 0px 0px 10px 3px vars.$aqua;
     transition: background-color 0.2s ease,
                 border-color 0.2s ease,
                 color 0.2s ease,
@@ -56,9 +56,9 @@
   }
 
   &:active {
-    background-color: $aqua;
-    color: $aqua-focus;
-    border-color: $aqua-focus;
+    background-color: vars.$aqua;
+    color: vars.$aqua-focus;
+    border-color: vars.$aqua-focus;
     transition: background-color 0.2s ease,
                 border-color 0.2s ease,
                 color 0.2s ease,
@@ -81,8 +81,8 @@
   width: 100%;
   height: 50px;
   padding-bottom: 10px;
-  border-bottom: 2px solid $aqua;
-  @include text;
+  border-bottom: 2px solid vars.$aqua;
+  @include vars.text;
   font-size: 30px;
 }
 
@@ -93,7 +93,7 @@
   width: 100%;
   height: 100%;
   padding-bottom: 40px;
-  @include text;
+  @include vars.text;
   font-size: 30px;
 }
 
@@ -130,7 +130,7 @@
   width: 100%;
   height: 60px;
   padding: 0px 8px;
-  @include text;
+  @include vars.text;
   font-size: 24px;
 
   :first-child{
@@ -139,7 +139,7 @@
     width: 50%;
     height :100%;
     padding-left: 10px; 
-    border-left: 5px solid $aqua;
+    border-left: 5px solid vars.$aqua;
   }
 
   :last-child {

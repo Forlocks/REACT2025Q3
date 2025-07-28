@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables.scss' as vars;
 
 .about {
   display: flex;
@@ -22,13 +22,13 @@
 .about__avatar {
   width: 300px;
   height: 300px;
-  border: 5px solid $aqua;
+  border: 5px solid vars.$aqua;
   border-radius: 10%;
 }
 
 .about__description {
   width: 60%;
-  @include text;
+  @include vars.text;
   font-size: 24px;
   
 }
@@ -36,7 +36,7 @@
 .about__school-logo {
   width: 150px;
   padding: 5px;
-  background-color: $aqua;
+  background-color: vars.$aqua;
   border-radius: 10px;
   transform: translateY(0px);
   transition: transform 0.5s ease;
