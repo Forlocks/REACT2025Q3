@@ -25,8 +25,10 @@ export const MainPage: React.FC = () => {
 
   const location = useLocation();
   const pathParts = location.pathname.split('/').filter(Boolean);
+  const basename = "/REACT2025Q3";
+  const relevantParts = basename ? pathParts.slice(pathParts.indexOf(basename.split('/').filter(Boolean)[0]) + 1) : pathParts;
 
-  if (isNaN(currentPage) || (pathParts.length > 1)) {
+  if (isNaN(currentPage) || (relevantParts.length > 1)) {
     return <NotFoundPage />
   }
   
