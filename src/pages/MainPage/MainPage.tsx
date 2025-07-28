@@ -36,15 +36,7 @@ export const MainPage: React.FC = () => {
 
   let content;
 
-  if (ships === null) {
-    content = (
-      <div className="main__error-message">
-        An error has occurred
-        <br />
-        Check your network connection, you may need a VPN.
-      </div>
-    );
-  } else if (isLoading) {
+  if (ships === null || isLoading) {
     content = (
       <div className="main__spinner">
         <img src={spinner} alt="Loading spinner" />
