@@ -1,0 +1,71 @@
+@use '../../variables.scss' as vars;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  border: 5px solid vars.$aqua;
+  border-radius: 10px;
+  background-color: vars.$gray;
+  box-shadow: 0px 10px 15px vars.$aqua;
+  transform: translateY(0px);
+  transition: transform 0.5s ease;
+
+  &:hover {
+    cursor: pointer;
+    animation: shadowPulse 0.5s infinite ease-in-out;
+    transform: translateY(-5px);
+    transition: transform 0.5s ease;
+  }
+
+  &:active {
+    transform: translateY(0px);
+    transition: transform 0.1s ease;
+  }
+}
+
+.card__name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: vars.$aqua-focus;
+  @include vars.title-text;
+  font-size: 32px;
+  color: vars.$aqua;
+  text-align: center;
+}
+
+.card__description {
+  display: flex;
+  flex-direction: column;
+}
+
+.card__property {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  min-height: 40px;
+  padding: 0px 8px;
+  border-top: 5px solid vars.$gray-focus;
+  @include vars.text;
+  font-size: 24px;
+
+  :first-child{
+    display: flex;
+    width: 50%;
+  }
+
+  :last-child {
+    display: flex;
+    justify-content: flex-end;
+    width: 50%;
+    padding: 8px;
+    text-align: end;
+  }
+}

@@ -1,0 +1,106 @@
+@use './variables.scss' as vars;
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, sub, sup, tt, var,
+b, u, i, center, fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, ul, ol, li, button, input, label {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+a {
+    text-decoration: none;
+}
+* {
+    box-sizing: border-box;
+  }
+html {
+    height: 100%;
+    scroll-behavior: smooth;
+    overflow: hidden;
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: vars.$aqua-focus;
+        border: 2px solid vars.$aqua;
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: vars.$gray-focus;
+    }
+}
+
+body {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  background: url('./assets/images/black-pattern.webp');
+  background-repeat: repeat;
+  background-size: auto;
+}
+
+@font-face {
+	font-family: 'Prototype';
+	src: url('./assets/fonts/Prototype.ttf');
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes shadowPulse {
+  0% {
+    box-shadow: 0px 10px 15px rgba(94, 245, 255, 1);
+  }
+  50% {
+    box-shadow: 0px 10px 15px rgba(94, 245, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0px 10px 15px rgba(94, 245, 255, 1);
+  }
+}

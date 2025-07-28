@@ -1,0 +1,67 @@
+@use '../../variables.scss' as vars;
+
+.about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  height: 100vh;
+  width: 100%;
+}
+
+.about__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.about__avatar {
+  width: 300px;
+  height: 300px;
+  border: 5px solid vars.$aqua;
+  border-radius: 10%;
+}
+
+.about__description {
+  width: 60%;
+  @include vars.text;
+  font-size: 24px;
+  
+}
+
+.about__school-logo {
+  width: 150px;
+  padding: 5px;
+  background-color: vars.$aqua;
+  border-radius: 10px;
+  transform: translateY(0px);
+  transition: transform 0.5s ease;
+
+  &:hover {
+    cursor: pointer;
+    animation: shadowPulse 0.5s infinite ease-in-out;
+    transform: translateY(-5px);
+    transition: transform 0.5s ease;
+  }
+
+  &:active {
+    transform: translateY(0px);
+    transition: transform 0.1s ease;
+  }
+}
+
+@media (max-width: 1035px) {
+  .about__container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 900px) {
+  .about__container {
+    justify-content:flex-start;
+  }
+}
