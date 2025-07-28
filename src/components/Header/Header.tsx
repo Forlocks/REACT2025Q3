@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Button } from '../Button/Button';
 import './Header.scss';
 
@@ -21,7 +21,7 @@ export const Header: React.FC<HeaderProps> = ({ children }) => {
 
   return (
     <header className="header">
-      <a className="header__title" href="/">Star Trek Ships</a>
+      <Link to="/" className="header__title">Star Trek Ships</Link>
       <div className="header__right-bar">
         {children}
         <Button onButtonClick={handleError}>Get error</Button>

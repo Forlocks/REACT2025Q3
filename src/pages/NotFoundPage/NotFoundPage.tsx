@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import './NotFoundPage.scss';
 import brokenShip from '../../assets/images/not-found.webp';
 
@@ -11,9 +12,9 @@ export const NotFoundPage: React.FC = () => {
         <br />
         <div>
           You can return to the&nbsp;
-          <a className="not-found__link" href="/">
+          <Link to="/" className="not-found__link">
             main page
-          </a>
+          </Link>
         </div>
       </div>
     </div>

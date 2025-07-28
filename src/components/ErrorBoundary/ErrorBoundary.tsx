@@ -23,7 +23,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps> {
           Error in the system operation
           <div>
             Please try&nbsp;
-            <a className="error-message__link" href={window.location.href}>
+            <a onClick={() => window.location.reload()} className="error-message__link">
               reload
             </a>
             &nbsp;this page or change page in URL
