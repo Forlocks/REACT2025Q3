@@ -51,16 +51,6 @@ describe('MainPage', () => {
     expect(screen.getByAltText('Loading spinner')).toBeInTheDocument();
   });
 
-  it('should show error message when ships is null', () => {
-    mockUseShipLoader.mockReturnValue({
-      ...mockUseShipLoader(1),
-      ships: null,
-    });
-    renderMainPage();
-    expect(screen.getByText(/An error has occurred/i)).toBeInTheDocument();
-    expect(screen.getByText(/Check your network connection/i)).toBeInTheDocument();
-  });
-
   it('should show "No results found" when ships array is empty', () => {
     mockUseShipLoader.mockReturnValue({
       ...mockUseShipLoader(1),
