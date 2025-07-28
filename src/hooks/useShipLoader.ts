@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { getShips } from '../controllers/getShips';
 import { Ship } from '../models/Ship';
 

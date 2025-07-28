@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import { getShipClass } from "../controllers/getShipClass";
 import { deleteTags } from "../controllers/deleteTags";
 import { ShipClass } from '../models/ShipClass';
