@@ -12,34 +12,40 @@ export function useShipLoader(currentPage: number) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function loadCards(query: string) {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
+  const controller = new AbortController();
+  abortControllerRef.current = controller;
 
-      setIsLoading(true);
+  const loadCards = async (query: string) => {
+    setIsLoading(true);
 
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
-
+    try {
       const shipResults = await getShips(query, currentPage - 1, controller);
-      setPageCount(shipResults?.totalPages);
-      setShips(shipResults?.spacecrafts);
-
-      setIsLoading(false);
-    }
-
-    const lastRequest = localStorage.getItem('STS last request') || '';
-
-    setInputValue(lastRequest);
-    loadCards(lastRequest);
-
-    return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
+      if (!controller.signal.aborted) {
+        setPageCount(shipResults?.totalPages);
+        setShips(shipResults?.spacecrafts);
       }
-    };
-  }, [currentPage]);
+    } catch (error) {
+      if (!controller.signal.aborted && error instanceof Error) {
+        setShips(null);
+      }
+    } finally {
+      if (!controller.signal.aborted) {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const lastRequest = localStorage.getItem('STS last request') || '';
+
+  setInputValue(lastRequest);
+  loadCards(lastRequest);
+
+  return () => {
+    if (!abortControllerRef.current?.signal.aborted) {
+      abortControllerRef.current?.abort();
+    }
+  };
+}, [currentPage]);
 
   const handleSearch = async (searchValue: string = inputValue) => {
     if (abortControllerRef.current) {
