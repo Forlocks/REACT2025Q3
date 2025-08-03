@@ -2,20 +2,20 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useSearchParams } from 'react-router-dom';
 import { useShipClassLoader } from './useShipClassLoader';
-import { getShipClass } from '../controllers/getShipClass';
-import { deleteTags } from '../controllers/deleteTags';
+import { getShipClass } from '../../controllers/getShipClass/getShipClass';
+import { deleteTags } from '../../controllers/deleteTags/deleteTags';
 import { 
   mockShipClass, 
   mockSearchParams, 
   setSearchParamsMock,
   unknownShipClassResponse
-} from '../test-utils/fetch-mocks';
+} from '../../test-utils/fetch-mocks';
 
-vi.mock('../controllers/getShipClass', () => ({
+vi.mock('../../controllers/getShipClass/getShipClass', () => ({
   getShipClass: vi.fn(),
 }));
 
-vi.mock('../controllers/deleteTags', () => ({
+vi.mock('../../controllers/deleteTags/deleteTags', () => ({
   deleteTags: vi.fn(),
 }));
 

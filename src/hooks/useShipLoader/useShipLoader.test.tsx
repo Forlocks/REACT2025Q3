@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { useShipLoader } from './useShipLoader';
-import { getShips } from '../controllers/getShips';
+import { getShips } from '../../controllers/getShips/getShips';
 import React from 'react';
-import { mockShips, mockShipResults } from '../test-utils/fetch-mocks';
+import { mockShips, mockShipResults } from '../../test-utils/fetch-mocks';
 
-vi.mock('../controllers/getShips');
+vi.mock('../../controllers/getShips/getShips');
 
 describe('useShipLoader', () => {
   beforeEach(() => {

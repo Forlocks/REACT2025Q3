@@ -4,7 +4,7 @@ import { MemoryRouter, Routes, Route, } from 'react-router-dom';
 import { MainPage } from './MainPage';
 import { useShipLoader } from '../../hooks/useShipLoader/useShipLoader';
 
-vi.mock('../../hooks/useShipLoader');
+vi.mock('../../hooks/useShipLoader/useShipLoader');
 vi.mock('../../components/Header/Header');
 vi.mock('../../components/Form/Form');
 vi.mock('../../components/CardsContainer/CardsContainer');

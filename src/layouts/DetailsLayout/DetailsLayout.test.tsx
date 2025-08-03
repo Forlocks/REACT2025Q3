@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { DetailsLayout } from './DetailsLayout';
 import { useShipClassLoader } from '../../hooks/useShipClassLoader/useShipClassLoader';
 
-vi.mock('../../hooks/useShipClassLoader');
+vi.mock('../../hooks/useShipClassLoader/useShipClassLoader');
 vi.mock('react-router', () => ({
   Outlet: () => <div>Main Content</div>
 }));
