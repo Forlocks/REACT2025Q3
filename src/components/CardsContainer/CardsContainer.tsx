@@ -12,6 +12,7 @@ export const CardsContainer: React.FC<CardsContainerProps> = ({ ships }) => {
   const cards = ships.map((ship) => (
     <Card
       key={ship.uid}
+      uid={ship.uid}
       classId={ship.spacecraftClass?.uid}
       name={deleteTags(ship.name) || 'unknown'}
       registry={deleteTags(ship.registry) || 'unknown'}

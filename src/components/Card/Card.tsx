@@ -1,8 +1,13 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCard, removeCard, selectAllSelectedCards } from '../../slices/selectedCardsSlice';
+import { RootState } from '../../store';
+import { Checkbox } from '../Checkbox/Checkbox';
 import './Card.scss';
 
-interface CardProps {
+export interface CardProps {
+  uid: string;
   classId: string | undefined;
   name: string;
   registry: string;
@@ -14,6 +19,7 @@ interface CardProps {
 }
 
 export const Card: React.FC<CardProps> = ({
+  uid,
   classId,
   name,
   registry,
@@ -24,17 +30,44 @@ export const Card: React.FC<CardProps> = ({
   operator,
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const dispatch = useDispatch();
+  const selectedCards = useSelector((state: RootState) => selectAllSelectedCards(state));
+  const isSelected = selectedCards.some(card => card.uid === uid);
 
-  const handleClick = async () => {
+  const handleClick = () => {
     const newSearchParams = new URLSearchParams(searchParams);
 
     newSearchParams.set('details', classId || 'empty');
     setSearchParams(newSearchParams);
   }
 
+  const handleCheckboxClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    if (isSelected) {
+      dispatch(removeCard(uid));
+      return;
+    }
+
+    dispatch(addCard({
+      uid,
+      classId,
+      name,
+      registry,
+      status,
+      dateStatus,
+      shipClass,
+      owner,
+      operator,
+    }));
+  }
+
   return (
     <div className="card" onClick={handleClick}>
-      <div className="card__name">{name}</div>
+      <div className="card__title">
+        <Checkbox onCheckboxClick={handleCheckboxClick} isChecked={isSelected}></Checkbox>
+        <div className="card__name">{name}</div>
+      </div>
       <ul className="card__description">
         <li className="card__property">
           <span>Registry:</span>

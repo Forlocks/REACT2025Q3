@@ -48,7 +48,7 @@ export const Pagination: React.FC<PaginationProps> = ({ pageCount }) => {
   }, [pageCount, currentPage, location]);
 
   if (!isPaginationVisible) {
-    return null;
+    return <footer className="pagination"></footer>;
   }
 
   return (
