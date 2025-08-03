@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route, } from 'react-router-dom';
 import { MainPage } from './MainPage';
-import { useShipLoader } from '../../hooks/useShipLoader';
+import { useShipLoader } from '../../hooks/useShipLoader/useShipLoader';
 
 vi.mock('../../hooks/useShipLoader');
 vi.mock('../../components/Header/Header');

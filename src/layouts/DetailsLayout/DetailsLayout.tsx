@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router";
-import { useShipClassLoader } from '../../hooks/useShipClassLoader';
+import { useShipClassLoader } from '../../hooks/useShipClassLoader/useShipClassLoader';
 import './DetailsLayout.scss';
 import spinner from '../../assets/images/spinner.webp';
 

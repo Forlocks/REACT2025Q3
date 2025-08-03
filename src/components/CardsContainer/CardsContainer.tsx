@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '../Card/Card';
 import { Ship } from '../../models/Ship';
-import { deleteTags } from '../../controllers/deleteTags';
+import { deleteTags } from '../../controllers/deleteTags/deleteTags';
 import './CardsContainer.scss';
 
 interface CardsContainerProps {

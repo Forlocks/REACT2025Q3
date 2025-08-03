@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { getShipClass } from "../controllers/getShipClass";
-import { deleteTags } from "../controllers/deleteTags";
-import { ShipClass } from '../models/ShipClass';
+import { getShipClass } from "../../controllers/getShipClass/getShipClass";
+import { deleteTags } from "../../controllers/deleteTags/deleteTags";
+import { ShipClass } from '../../models/ShipClass';
 
 export function useShipClassLoader() {
   const [isDetailsVisible, setIsDetailsVisible] = useState(false);

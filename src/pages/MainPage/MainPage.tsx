@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useLocation, Navigate, Routes, Route } from 'react-router-dom';
-import { useShipLoader } from '../../hooks/useShipLoader';
+import { useShipLoader } from '../../hooks/useShipLoader/useShipLoader';
 import { DetailsLayout } from '../../layouts/DetailsLayout/DetailsLayout';
 import { Header } from '../../components/Header/Header';
 import { Form } from '../../components/Form/Form';

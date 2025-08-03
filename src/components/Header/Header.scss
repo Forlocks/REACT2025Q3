@@ -14,6 +14,13 @@
   z-index: 10;
 }
 
+.header__left-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
 .header__title {
   display: block;
   @include vars.title-text;
@@ -43,7 +50,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .header {
     flex-direction: column;
     align-items: center;
@@ -52,6 +59,7 @@
     min-height: 137px;
   }
 
+  .header__left-bar,
   .header__right-bar {
     justify-content: center;
   }
