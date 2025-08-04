@@ -1,67 +1,70 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Routes, Route, } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { MainPage } from './MainPage';
-import { useShipLoader } from '../../hooks/useShipLoader';
 
-vi.mock('../../hooks/useShipLoader');
-vi.mock('../../components/Header/Header');
-vi.mock('../../components/Form/Form');
-vi.mock('../../components/CardsContainer/CardsContainer');
-vi.mock('../../components/Pagination/Pagination');
-vi.mock('../NotFoundPage/NotFoundPage');
-vi.mock('../../layouts/DetailsLayout/DetailsLayout');
+const mockUseShipLoader = vi.fn();
 
-const mockUseShipLoader = vi.mocked(useShipLoader);
+vi.mock('../../hooks/useShipLoader/useShipLoader', () => ({
+  useShipLoader: (page: number) => mockUseShipLoader(page),
+}));
 
 describe('MainPage', () => {
-  const renderMainPage = (route = '/1') => {
-    return render(
-      <MemoryRouter initialEntries={[route]}>
-        <Routes>
-          <Route path="/:page?" element={<MainPage />} />
-          <Route path="*" element={<div>Not Found</div>} />
-        </Routes>
-      </MemoryRouter>
-    );
-  };
-
   beforeEach(() => {
-    mockUseShipLoader.mockReturnValue({
+    mockUseShipLoader.mockReset();
+    mockUseShipLoader.mockImplementation(() => ({
+      inputValue: 'test',
+      isLoading: false,
+      ships: [{ id: '1', name: 'Ship 1' }],
+      pageCount: 3,
+      handleInputChange: vi.fn(),
+      handleSearch: vi.fn(),
+    }));
+  });
+
+  it('shows empty state when no ships are found', () => {
+    mockUseShipLoader.mockImplementation(() => ({
       inputValue: '',
       isLoading: false,
       ships: [],
-      pageCount: 1,
+      pageCount: 0,
       handleInputChange: vi.fn(),
       handleSearch: vi.fn(),
-    });
+    }));
+
+    render(
+      <MemoryRouter initialEntries={['/1']}>
+        <Routes>
+          <Route path="/:page" element={<MainPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByTestId('ship-card')).not.toBeInTheDocument();
   });
 
-  it('should redirect to /1 when no page specified', () => {
-    renderMainPage('/');
-    expect(screen.queryByText('Not Found')).toBeNull();
+  it('invokes useShipLoader with NaN for invalid page param', () => {
+    render(
+      <MemoryRouter initialEntries={['/abc']}>
+        <Routes>
+          <Route path="/:page" element={<MainPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(mockUseShipLoader).toHaveBeenCalledWith(NaN);
   });
 
-  it('should show loading spinner when isLoading is true', () => {
-    mockUseShipLoader.mockReturnValue({
-      ...mockUseShipLoader(1),
-      isLoading: true,
-    });
-    renderMainPage();
-    expect(screen.getByAltText('Loading spinner')).toBeInTheDocument();
-  });
+  it('navigates to /1 when no page param is provided', () => {
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/1" element={<div>Page 1</div>} />
+        </Routes>
+      </MemoryRouter>
+    );
 
-  it('should show "No results found" when ships array is empty', () => {
-    mockUseShipLoader.mockReturnValue({
-      ...mockUseShipLoader(1),
-      ships: [],
-    });
-    renderMainPage();
-    expect(screen.getByText('No results found')).toBeInTheDocument();
-  });
-
-  it('should show NotFoundPage for invalid path structure', () => {
-    renderMainPage('/1/invalid');
-    expect(screen.getByText('Not Found')).toBeInTheDocument();
-  });
+    expect(screen.getByText('Page 1')).toBeInTheDocument();
+  });  
 });

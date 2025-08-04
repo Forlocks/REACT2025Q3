@@ -24,3 +24,17 @@
         animation: rotate 1s linear infinite;
     }
 }
+
+.main__error-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    @include vars.title-text;
+    font-size: 40px;
+    color: vars.$aqua;
+}

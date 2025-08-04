@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { CardsContainer } from './CardsContainer';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from '../../store';
 
 const ships = [
   {
@@ -29,9 +31,11 @@ const ships = [
 describe('CardsContainer', () => {
   it('renders all ships as Card components', () => {
     render(
-      <BrowserRouter>
-        <CardsContainer ships={ships} />
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <CardsContainer ships={ships} />
+        </BrowserRouter>
+      </Provider>
     );
 
     expect(screen.getByText('USS Enterprise')).toBeInTheDocument();

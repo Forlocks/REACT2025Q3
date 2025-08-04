@@ -1,7 +1,14 @@
-$aqua: #63f5ff;
-$aqua-focus: #004747;
-$gray: #414040;
-$gray-focus: #272727;
+:root {
+  --aqua: #63f5ff;
+  --aqua-focus: #004747;
+  --gray: #414040;
+  --gray-focus: #272727;
+}
+
+$aqua: var(--aqua);
+$aqua-focus: var(--aqua-focus);
+$gray: var(--gray);
+$gray-focus: var(--gray-focus);
 
 @mixin text {
   font-family: 'Prototype', sans-serif;

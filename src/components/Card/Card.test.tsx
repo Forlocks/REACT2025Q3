@@ -2,8 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Card } from './Card';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from '../../store';
 
 const defaultProps = {
+  uid: '123',
   classId: '123',
   name: 'USS Enterprise',
   registry: 'NCC-1701',
@@ -17,9 +20,11 @@ const defaultProps = {
 describe('Card', () => {
   it('renders all props correctly', () => {
     render(
-      <BrowserRouter>
-        <Card {...defaultProps} />
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Card {...defaultProps} />
+        </BrowserRouter>
+      </Provider>
     );
     expect(screen.getByText(defaultProps.name)).toBeInTheDocument();
     expect(screen.getByText(defaultProps.registry)).toBeInTheDocument();
@@ -32,9 +37,11 @@ describe('Card', () => {
 
   it('has correct class and structure', () => {
     render(
-      <BrowserRouter>
-        <Card {...defaultProps} />
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Card {...defaultProps} />
+        </BrowserRouter>
+      </Provider>
     );
     const card = screen.getByText(defaultProps.name).closest('.card');
     expect(card).toBeTruthy();

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getShips } from '../controllers/getShips';
-import { Ship } from '../models/Ship';
+import { getShips } from '../../controllers/getShips/getShips';
+import { Ship } from '../../models/Ship';
 
 export function useShipLoader(currentPage: number) {
   const [inputValue, setInputValue] = useState('');

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '../Card/Card';
 import { Ship } from '../../models/Ship';
-import { deleteTags } from '../../controllers/deleteTags';
+import { deleteTags } from '../../controllers/deleteTags/deleteTags';
 import './CardsContainer.scss';
 
 interface CardsContainerProps {
@@ -12,6 +12,7 @@ export const CardsContainer: React.FC<CardsContainerProps> = ({ ships }) => {
   const cards = ships.map((ship) => (
     <Card
       key={ship.uid}
+      uid={ship.uid}
       classId={ship.spacecraftClass?.uid}
       name={deleteTags(ship.name) || 'unknown'}
       registry={deleteTags(ship.registry) || 'unknown'}

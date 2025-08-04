@@ -1,7 +1,8 @@
 import React from 'react';
 import { useParams, useLocation, Navigate, Routes, Route } from 'react-router-dom';
-import { useShipLoader } from '../../hooks/useShipLoader';
+import { useShipLoader } from '../../hooks/useShipLoader/useShipLoader';
 import { DetailsLayout } from '../../layouts/DetailsLayout/DetailsLayout';
+import { SelectedPanelLayout } from '../../layouts/SelectedPanelLayout/SelectedPanelLayout';
 import { Header } from '../../components/Header/Header';
 import { Form } from '../../components/Form/Form';
 import { CardsContainer } from '../../components/CardsContainer/CardsContainer';
@@ -34,26 +35,6 @@ export const MainPage: React.FC = () => {
     return <Navigate to="/1" replace />
   }
 
-  let content;
-
-  if (ships === null || isLoading) {
-    content = (
-      <div className="main__spinner">
-        <img src={spinner} alt="Loading spinner" />
-      </div>
-    );
-  } else if (ships.length) {
-    content = (
-      <Routes>
-        <Route path="/" element={<DetailsLayout />}>
-          <Route index element={<CardsContainer ships={ships} />}/>
-        </Route>
-      </Routes>
-    );
-  } else {
-    content = <div className="main__error-message">No results found</div>;
-  }
-
   return (
     <div className="main">
       <Header>
@@ -63,7 +44,27 @@ export const MainPage: React.FC = () => {
           onSearch={() => handleSearch()}
         />
       </Header>
-      {content}
+      
+      <Routes>
+        <Route path="/" element={<DetailsLayout />}>
+          <Route element={<SelectedPanelLayout />}>
+            <Route index element={
+              <>
+                {isLoading || ships === null ? (
+                  <div className="main__spinner">
+                    <img src={spinner} alt="Loading spinner" />
+                  </div>
+                ) : ships.length ? (
+                  <CardsContainer ships={ships} />
+                ) : (
+                  <div className="main__error-message">No results found</div>
+                )}
+              </>
+            }/>
+          </Route>
+        </Route>
+      </Routes>
+      
       <Pagination pageCount={pageCount} />
     </div>
   );
