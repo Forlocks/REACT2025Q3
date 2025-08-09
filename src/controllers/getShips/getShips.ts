@@ -18,6 +18,7 @@ export async function getShips(key: string, page: number, controller: AbortContr
   try {
     const response = await fetch(`${API_URL}${queryOptions}`, requestOptions);
     const data = await response.json();
+    console.log(data);
 
     return {
         spacecrafts: data.spacecrafts,
