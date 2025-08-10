@@ -2,7 +2,7 @@ import { Ship } from "../models/Ship";
 import { baseApi } from "./api";
 
 interface ShipsApiResponse {
-  spacecrafts: Ship[],
+  spacecrafts: Ship[];
   page: {
     firstPage: boolean;
     lastPage: boolean;
