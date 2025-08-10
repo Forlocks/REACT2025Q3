@@ -1,5 +1,5 @@
 import { Ship } from "../models/Ship";
-import { baseApi } from "./api";
+import { baseApi } from "./baseApi";
 
 interface ShipsApiResponse {
   spacecrafts: Ship[];
@@ -33,7 +33,8 @@ const shipsApi = baseApi.injectEndpoints({
       transformResponse: (response: ShipsApiResponse) => ({
         spacecrafts: response.spacecrafts,
         totalPages:  response.page.totalPages,
-      })
+      }),
+      providesTags: ['Ships'],
     }),
   }),
   overrideExisting: true,

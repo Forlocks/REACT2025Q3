@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router";
+import { useDispatch } from "react-redux";
+import { baseApi } from '../../api/baseApi';
 import { useShipClassLoader } from '../../hooks/useShipClassLoader/useShipClassLoader';
 import { deleteTags } from "../../controllers/deleteTags/deleteTags";
+import { Button } from "../../components/Button/Button";
 import './DetailsLayout.scss';
 import spinner from '../../assets/images/spinner.webp';
+import reset from '../../assets/images/reset.webp';
 
 export const DetailsLayout: React.FC = () => {
   const {
@@ -16,6 +20,16 @@ export const DetailsLayout: React.FC = () => {
     isFetching,
     shipDetails,
   } = useShipClassLoader();
+  const [isRotating, setIsRotating] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const revalidateQueryCache = () => {
+    dispatch(baseApi.util.invalidateTags(['ShipClass']));
+
+    setIsRotating(true);
+    setTimeout(() => setIsRotating(false), 500);
+  }
 
   let content;
 
@@ -80,7 +94,12 @@ export const DetailsLayout: React.FC = () => {
       <aside className={isDetailsVisible ? 'details details_visible' : 'details'}>
         <div className="details__button" onClick={handleHideDetails}>&#62;</div>
         <div className="details__container">
-          <div className="details__title">Ship Class</div>
+          <div className="details__header">
+            <div className="details__title">Ship Class</div>
+            <Button onButtonClick={revalidateQueryCache}>
+              <img src={reset} className={isRotating ? 'rotating' : ''} width="20" height="20" alt="Reset query cache" />
+            </Button>
+          </div>
           {content}
         </div>
       </aside>

@@ -1,5 +1,5 @@
 import { ShipClass } from "../models/ShipClass";
-import { baseApi } from "./api";
+import { baseApi } from "./baseApi";
 
 interface ShipClassApiResponse {
   spacecraftClass: ShipClass;
@@ -15,6 +15,7 @@ const shipClassApi = baseApi.injectEndpoints({
         url: `spacecraftClass?uid=${uid}`,
       }),
       transformResponse: (response: ShipClassApiResponse) => response.spacecraftClass,
+      providesTags: ['ShipClass'],
     }),
   }),
   overrideExisting: true,

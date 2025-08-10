@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import selectedCardsSlice from './slices/selectedCardsSlice';
-import { baseApi } from './api/api';
+import { baseApi } from './api/baseApi';
 
 export const store = configureStore({
   reducer: {
