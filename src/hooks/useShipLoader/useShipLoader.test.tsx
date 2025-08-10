@@ -1,70 +1,95 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 import { useShipLoader } from './useShipLoader';
-import { getShips } from '../../controllers/getShips/getShips';
-import React from 'react';
-import { mockShips, mockShipResults } from '../../test-utils/fetch-mocks';
+import * as shipsApi from '../../api/shipsApi';
 
-vi.mock('../../controllers/getShips/getShips');
+const mockedNavigate = vi.fn();
+
+vi.mock('react-router-dom', () => ({
+  useNavigate: () => mockedNavigate,
+}));
+
+const mockUseGetShipsQuery = vi.spyOn(shipsApi, 'useGetShipsQuery');
 
 describe('useShipLoader', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-  
-    vi.spyOn(Storage.prototype, 'getItem').mockReturnValue('');
-    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {});
-    
-    vi.mocked(getShips).mockResolvedValue(mockShipResults);
+    mockedNavigate.mockClear();
+    mockUseGetShipsQuery.mockClear();
+    localStorage.clear();
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
+  it('should initialize inputValue and query from localStorage', () => {
+    localStorage.setItem('STS last request', 'test query');
 
-  const Wrapper = ({ children }: { children: React.ReactNode }) => (
-    <MemoryRouter>
-      {children}
-    </MemoryRouter>
-  );
-
-  it('should load ships on mount with last search query', async () => {
-    const lastRequest = 'enterprise';
-    Storage.prototype.getItem = vi.fn(() => lastRequest);
-
-    renderHook(() => useShipLoader(1), { wrapper: Wrapper });
-
-    await act(async () => {
-      await Promise.resolve();
+    mockUseGetShipsQuery.mockReturnValue({
+      data: { spacecrafts: ['ship1'], totalPages: 2 },
+      error: null,
+      isError: false,
+      isLoading: false,
+      isFetching: false,
+      refetch: vi.fn(),
     });
 
-    expect(localStorage.getItem).toHaveBeenCalledWith('STS last request');
-    expect(getShips).toHaveBeenCalledWith(lastRequest, 0, expect.any(AbortController));
+    const { result } = renderHook(() => useShipLoader(1));
+
+    expect(result.current.inputValue).toBe('test query');
+    expect(result.current.ships).toEqual(['ship1']);
+    expect(result.current.pageCount).toBe(2);
   });
 
-  it('should handle search with trimmed value', async () => {
-    const { result } = renderHook(() => useShipLoader(1), { wrapper: Wrapper });
-
-    const searchValue = '  voyager  ';
-    await act(async () => {
-      await result.current.handleSearch(searchValue);
+  it('handleInputChange should update inputValue', () => {
+    mockUseGetShipsQuery.mockReturnValue({
+      data: null,
+      error: null,
+      isError: false,
+      isLoading: false,
+      isFetching: false,
+      refetch: vi.fn(),
     });
 
-    expect(getShips).toHaveBeenCalledWith('voyager', 0, expect.any(AbortController));
-    expect(result.current.ships).toEqual(mockShips);
-    expect(result.current.pageCount).toBe(5);
-  });
+    const { result } = renderHook(() => useShipLoader(1));
 
-  it('should handle input change', () => {
-    const { result } = renderHook(() => useShipLoader(1), { wrapper: Wrapper });
-
-    const newValue = 'deep space';
     act(() => {
-      result.current.handleInputChange({ 
-        target: { value: newValue } 
-      } as React.ChangeEvent<HTMLInputElement>);
+      result.current.handleInputChange({ target: { value: 'new input' } } as React.ChangeEvent<HTMLInputElement>);
     });
 
-    expect(result.current.inputValue).toBe(newValue);
+    expect(result.current.inputValue).toBe('new input');
+  });
+
+  it('handleSearch should save value to localStorage, call navigate and update query', () => {
+    mockUseGetShipsQuery.mockReturnValue({
+      data: null,
+      error: null,
+      isError: false,
+      isLoading: false,
+      isFetching: false,
+      refetch: vi.fn(),
+    });
+
+    const { result } = renderHook(() => useShipLoader(1));
+
+    act(() => {
+      result.current.handleSearch('search term');
+    });
+
+    expect(localStorage.getItem('STS last request')).toBe('search term');
+    expect(mockedNavigate).toHaveBeenCalledWith('/1');
+  });
+
+  it('should return correct loading and error states', () => {
+    mockUseGetShipsQuery.mockReturnValue({
+      data: null,
+      error: 'some error',
+      isError: true,
+      isLoading: true,
+      isFetching: false,
+      refetch: vi.fn(),
+    });
+
+    const { result } = renderHook(() => useShipLoader(1));
+
+    expect(result.current.error).toBe('some error');
+    expect(result.current.isError).toBe(true);
+    expect(result.current.isLoading).toBe(true);
+    expect(result.current.isFetching).toBe(false);
   });
 });

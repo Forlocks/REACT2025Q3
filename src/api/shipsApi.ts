@@ -16,7 +16,7 @@ interface ShipsApiResponse {
 
 const PAGE_SIZE: number = 15;
 
-const shipsApi = baseApi.injectEndpoints({
+export const shipsApi = baseApi.injectEndpoints({
   endpoints: (create) => ({
     getShips: create.query<
       { spacecrafts: Ship[]; totalPages: number },

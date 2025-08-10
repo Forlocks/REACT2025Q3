@@ -5,7 +5,7 @@ interface ShipClassApiResponse {
   spacecraftClass: ShipClass;
 }
 
-const shipClassApi = baseApi.injectEndpoints({
+export const shipClassApi = baseApi.injectEndpoints({
   endpoints: (create) => ({
     getShipClass: create.query<
       ShipClass,
