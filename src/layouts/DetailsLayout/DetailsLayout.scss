@@ -74,14 +74,19 @@
   padding: 20px;
 }
 
-.details__title {
+.details__header {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 20px;
   width: 100%;
   height: 50px;
   padding-bottom: 10px;
   border-bottom: 2px solid vars.$aqua;
+}
+
+.details__title {
+  padding-left: 74px;
   @include vars.text;
   font-size: 30px;
 }
@@ -95,23 +100,24 @@
   padding-bottom: 40px;
   @include vars.text;
   font-size: 30px;
+  text-align: center;
 }
 
 .details__spinner {
   display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
-    width: 100%;
-    height: 100%;
-    padding-bottom: 30px;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 30px;
 
-    :first-child {
-        display: flex;
-        width: 200px;
-        height: 200px;
-        animation: rotate 1s linear infinite;
-    }
+  :first-child {
+      display: flex;
+      width: 200px;
+      height: 200px;
+      animation: rotate 1s linear infinite;
+  }
 }
 
 .details__info {

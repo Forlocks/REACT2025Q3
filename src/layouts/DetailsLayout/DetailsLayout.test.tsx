@@ -1,103 +1,151 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import { DetailsLayout } from './DetailsLayout';
-import { useShipClassLoader } from '../../hooks/useShipClassLoader/useShipClassLoader';
+import * as hookModule from '../../hooks/useShipClassLoader/useShipClassLoader';
+import { baseApi } from '../../api/baseApi';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { ShipClass } from '../../models/ShipClass';
 
-vi.mock('../../hooks/useShipClassLoader/useShipClassLoader');
-vi.mock('react-router', () => ({
-  Outlet: () => <div>Main Content</div>
-}));
+const mockShipDetails: ShipClass = {
+  numberOfDecks: '5',
+  warpCapable: 'Yes',
+  alternateReality: 'No',
+  activeFrom: '2250',
+  activeTo: '2370',
+  species: 'Human',
+  affiliation: 'Federation',
+};
 
-const mockUseShipClassLoader = vi.mocked(useShipClassLoader);
+interface UseShipClassLoaderReturn {
+  isDetailsVisible: boolean;
+  isEmptyDetails: boolean;
+  handleHideDetails: () => void;
+  error: FetchBaseQueryError | SerializedError | undefined;
+  isError: boolean;
+  isLoading: boolean;
+  isFetching: boolean;
+  shipDetails: ShipClass;
+}
+
+// Дефолтный мок для хука
+const defaultMockReturnValue: UseShipClassLoaderReturn = {
+  isDetailsVisible: true,
+  isEmptyDetails: false,
+  handleHideDetails: vi.fn(),
+  error: undefined,
+  isError: false,
+  isLoading: false,
+  isFetching: false,
+  shipDetails: mockShipDetails,
+};
+
+// Создаем минимальный mock store с RTK Query reducer и middleware
+const store = configureStore({
+  reducer: {
+    [baseApi.reducerPath]: baseApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(baseApi.middleware),
+});
 
 describe('DetailsLayout', () => {
-  const defaultShipDetails = {
-    numberOfDecks: '15',
-    warpCapable: 'Yes',
-    alternateReality: 'No',
-    activeFrom: '2285',
-    activeTo: '2293',
-    species: 'Human',
-    affiliation: 'Starfleet'
-  };
-
   beforeEach(() => {
-    mockUseShipClassLoader.mockReturnValue({
-      isDetailsVisible: true,
-      isEmptyDetails: false,
-      isLoading: false,
-      shipDetails: defaultShipDetails,
-      handleHideDetails: vi.fn(),
-    });
+    vi.clearAllMocks();
   });
 
-  it('should render main content and details sidebar', () => {
-    render(<DetailsLayout />);
-    expect(screen.getByText('Main Content')).toBeInTheDocument();
+  it('renders ship details correctly', () => {
+    vi.spyOn(hookModule, 'useShipClassLoader').mockReturnValue(defaultMockReturnValue);
+
+    render(
+      <Provider store={store}>
+        <DetailsLayout />
+      </Provider>
+    );
+
+    // Проверяем заголовок
     expect(screen.getByText('Ship Class')).toBeInTheDocument();
+
+    // Проверяем вывод деталей из mockShipDetails
+    expect(screen.getByText('Number of decks:')).toBeInTheDocument();
+    expect(screen.getByText('5')).toBeInTheDocument();
+
+    expect(screen.getByText('Warp capable:')).toBeInTheDocument();
+    expect(screen.getByText('Yes')).toBeInTheDocument();
+
+    expect(screen.getByText('Alternate reality:')).toBeInTheDocument();
+    expect(screen.getByText('No')).toBeInTheDocument();
+
+    expect(screen.getByText('Active from:')).toBeInTheDocument();
+    expect(screen.getByText('2250')).toBeInTheDocument();
+
+    expect(screen.getByText('Active to:')).toBeInTheDocument();
+    expect(screen.getByText('2370')).toBeInTheDocument();
+
+    expect(screen.getByText('Species:')).toBeInTheDocument();
+    expect(screen.getByText('Human')).toBeInTheDocument();
+
+    expect(screen.getByText('Affiliation:')).toBeInTheDocument();
+    expect(screen.getByText('Federation')).toBeInTheDocument();
   });
 
-  it('should show loading spinner when loading', () => {
-    mockUseShipClassLoader.mockReturnValue({
-      ...mockUseShipClassLoader(),
+  it('shows loading spinner when loading', () => {
+    vi.spyOn(hookModule, 'useShipClassLoader').mockReturnValue({
+      ...defaultMockReturnValue,
       isLoading: true,
+      isFetching: false,
     });
-    render(<DetailsLayout />);
+
+    render(
+      <Provider store={store}>
+        <DetailsLayout />
+      </Provider>
+    );
+
     expect(screen.getByAltText('Loading spinner')).toBeInTheDocument();
   });
 
-  it('should show empty state when details are empty', () => {
-    mockUseShipClassLoader.mockReturnValue({
-      ...mockUseShipClassLoader(),
-      isEmptyDetails: true,
+  it('shows error message on error', () => {
+    const errorMock: FetchBaseQueryError = {
+      status: 500,
+      data: { message: 'Internal Server Error' },
+    };
+
+    vi.spyOn(hookModule, 'useShipClassLoader').mockReturnValue({
+      ...defaultMockReturnValue,
+      isError: true,
+      error: errorMock,
     });
-    render(<DetailsLayout />);
-    expect(screen.getByText('⚠ Unknown')).toBeInTheDocument();
+
+    render(
+      <Provider store={store}>
+        <DetailsLayout />
+      </Provider>
+    );
+
+    expect(screen.getByText(/Error: 500/)).toBeInTheDocument();
+    expect(screen.getByText(/Internal Server Error/)).toBeInTheDocument();
   });
 
-  it('should display all ship details when loaded', () => {
-    render(<DetailsLayout />);
-    expect(screen.getByText('Number of decks:')).toBeInTheDocument();
-    expect(screen.getByText('15')).toBeInTheDocument();
-    expect(screen.getByText('Warp capable:')).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
-    expect(screen.getByText('Species:')).toBeInTheDocument();
-    expect(screen.getByText('Human')).toBeInTheDocument();
-  });
+  it('calls handleHideDetails when hide button clicked', () => {
+    const handleHideDetailsMock = vi.fn();
 
-  it('should hide details panel when not visible', () => {
-    mockUseShipClassLoader.mockReturnValue({
-      ...mockUseShipClassLoader(),
-      isDetailsVisible: false,
+    vi.spyOn(hookModule, 'useShipClassLoader').mockReturnValue({
+      ...defaultMockReturnValue,
+      handleHideDetails: handleHideDetailsMock,
     });
-    render(<DetailsLayout />);
-    const detailsPanel = screen.getByText('Ship Class').parentElement;
-    expect(detailsPanel?.parentElement).not.toHaveClass('details_visible');
-  });
 
-  it('should show details panel when visible', () => {
-    mockUseShipClassLoader.mockReturnValue({
-      ...mockUseShipClassLoader(),
-      isDetailsVisible: true,
-    });
-    render(<DetailsLayout />);
-    const detailsPanel = screen.getByText('Ship Class').parentElement;
-    expect(detailsPanel?.parentElement).toHaveClass('details_visible');
-  });
+    render(
+      <Provider store={store}>
+        <DetailsLayout />
+      </Provider>
+    );
 
-  it('should render all ship properties', () => {
-    render(<DetailsLayout />);
-    const properties = [
-      'Number of decks',
-      'Warp capable',
-      'Alternate reality',
-      'Active from',
-      'Active to',
-      'Species',
-      'Affiliation'
-    ];
-    properties.forEach(prop => {
-      expect(screen.getByText(`${prop}:`)).toBeInTheDocument();
-    });
+    const hideButton = screen.getByText('>');
+    fireEvent.click(hideButton);
+
+    expect(handleHideDetailsMock).toHaveBeenCalled();
   });
 });

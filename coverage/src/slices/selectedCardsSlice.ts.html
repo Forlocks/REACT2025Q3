@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.51% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/29</span>
+                <span class='fraction'>29/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.51% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/29</span>
+                <span class='fraction'>29/29</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -123,19 +123,19 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -162,20 +162,20 @@ export const selectedCardsSlice = createSlice({
     selectAllSelectedCards: (state) =&gt; state.selectedCards,
   },
   reducers: {
-    addCard: <span class="fstat-no" title="function not covered" >(state, action: PayloadAction&lt;CardProps&gt;) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      const card = action.payload;</span>
+    addCard: (state, action: PayloadAction&lt;CardProps&gt;) =&gt; {
+      const card = action.payload;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (!state.selectedCards.some(savedCard =&gt; savedCard.uid === card.uid)) {</span>
-<span class="cstat-no" title="statement not covered" >        state.selectedCards.push(card);</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
-<span class="cstat-no" title="statement not covered" >    },</span>
-    removeCard: <span class="fstat-no" title="function not covered" >(state, action: PayloadAction&lt;string&gt;) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      const cardId = action.payload;</span>
-<span class="cstat-no" title="statement not covered" >      state.selectedCards = state.selectedCards.filter(card =&gt; card.uid !== cardId);</span>
-<span class="cstat-no" title="statement not covered" >    },</span>
-    clearCards: <span class="fstat-no" title="function not covered" >(state) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      state.selectedCards = [];</span>
-<span class="cstat-no" title="statement not covered" >    },</span>
+      if (!state.selectedCards.some(savedCard =&gt; savedCard.uid === card.uid)) {
+        state.selectedCards.push(card);
+      }
+    },
+    removeCard: (state, action: PayloadAction&lt;string&gt;) =&gt; {
+      const cardId = action.payload;
+      state.selectedCards = state.selectedCards.filter(card =&gt; card.uid !== cardId);
+    },
+    clearCards: (state) =&gt; {
+      state.selectedCards = [];
+    },
   },
 });
 &nbsp;
@@ -190,7 +190,7 @@ export default selectedCardsSlice.reducer;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-04T18:34:12.128Z
+                at 2025-08-12T00:44:50.644Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
