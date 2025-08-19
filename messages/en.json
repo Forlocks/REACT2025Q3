@@ -1,0 +1,48 @@
+{
+  "Header": {
+    "title": "Star Trek Ships",
+    "placeholder": "Ship name",
+    "searchButton": "Search",
+    "aboutLink": "About us",
+    "mainLink": "Main"
+  },
+  "MainPage": {
+    "error": "An unknown error occurred",
+    "noResults": "No results found"
+  },
+  "AboutPage": {
+    "message": "Hi, my name is Aleksey, and you are now on my web application. With it, you can get information about the ships of the Star Trek universe that interest you. If you click on the ship card, you will be able to get more detailed information about the class of the selected ship."
+  },
+  "NotFoundPage": {
+    "title": "404 Page not found",
+    "message": "You can return to the",
+    "link": "main page"
+  },
+  "Card": {
+    "registry": "Registry",
+    "status": "Status:",
+    "dateStatus": "Date status:",
+    "shipClass": "Class:",
+    "owner": "Owner:",
+    "operator": "Operator:",
+    "unknown": "Unknown"
+  },
+  "Details": {
+    "title": "Ship class",
+    "numberOfDecks": "Number of decks:",
+    "warpCapable": "Warp capable:",
+    "alternateReality": "Alternate reality:",
+    "activeFrom": "Active from:",
+    "activeTo": "Active to:",
+    "species": "Species:",
+    "affiliation": "Affiliation:",
+    "unknown": "Unknown",
+    "noResults": "No results found",
+    "error": "An unknown error occurred"
+  },
+  "SelectedPanel": {
+    "counter": "Cards selected:",
+    "resetButton": "Reset selection",
+    "downloadButton": "Download"
+  }
+}

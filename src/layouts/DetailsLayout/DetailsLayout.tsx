@@ -1,5 +1,8 @@
+'use client';
+
 import React, { useState } from "react";
-import { Outlet } from "react-router";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useDispatch } from "react-redux";
 import { baseApi } from '../../api/baseApi';
 import { useShipClassLoader } from '../../hooks/useShipClassLoader/useShipClassLoader';
@@ -9,7 +12,11 @@ import './DetailsLayout.scss';
 import spinner from '../../assets/images/spinner.webp';
 import reset from '../../assets/images/reset.webp';
 
-export const DetailsLayout: React.FC = () => {
+interface DetailsLayoutProps {
+  children: React.ReactNode;
+}
+
+export const DetailsLayout: React.FC<DetailsLayoutProps> = ({ children }) => {
   const {
     isDetailsVisible,
     isEmptyDetails,
@@ -21,8 +28,11 @@ export const DetailsLayout: React.FC = () => {
     shipDetails,
   } = useShipClassLoader();
   const [isRotating, setIsRotating] = useState(false);
+  const t = useTranslations('Details');
 
   const dispatch = useDispatch();
+
+  const unknownText = t('unknown');
 
   const revalidateQueryCache = () => {
     dispatch(baseApi.util.invalidateTags(['ShipClass']));
@@ -35,12 +45,12 @@ export const DetailsLayout: React.FC = () => {
 
   if (isEmptyDetails) {
     content = (
-      <div className="details__empty">⚠ Unknown</div>
+      <div className="details__empty">⚠ {t('noResults')}</div>
     );
   } else if (isLoading || isFetching) {
     content = (
       <div className="details__spinner">
-        <img src={spinner} alt="Loading spinner" />
+        <Image src={spinner} alt="Loading spinner" />
       </div>
     );
   } else if (isError) {
@@ -49,7 +59,7 @@ export const DetailsLayout: React.FC = () => {
         {
           error && ('status' in error)
             ? `Error: ${error.status} — ${(error.data as { message?: string })?.message}`
-            : 'An unknown error occurred'
+            : t('error')
         }
       </div>
     );
@@ -57,32 +67,32 @@ export const DetailsLayout: React.FC = () => {
     content = (
       <ul className="details__info">
         <li className="details__property">
-          <span>Number of decks:</span>
-          <span>{deleteTags(shipDetails.numberOfDecks) || 'unknown'}</span>
+          <span>{t('numberOfDecks')}</span>
+          <span>{deleteTags(shipDetails.numberOfDecks) || unknownText}</span>
         </li>
         <li className="details__property">
-          <span>Warp capable:</span>
-          <span>{deleteTags(shipDetails.warpCapable) || 'unknown'}</span>
+          <span>{t('warpCapable')}</span>
+          <span>{deleteTags(shipDetails.warpCapable) || unknownText}</span>
         </li>
         <li className="details__property">
-          <span>Alternate reality:</span>
-          <span>{deleteTags(shipDetails.alternateReality) || 'unknown'}</span>
+          <span>{t('alternateReality')}</span>
+          <span>{deleteTags(shipDetails.alternateReality) || unknownText}</span>
         </li>
         <li className="details__property">
-          <span>Active from:</span>
-          <span>{deleteTags(shipDetails.activeFrom) || 'unknown'}</span>
+          <span>{t('activeFrom')}</span>
+          <span>{deleteTags(shipDetails.activeFrom) || unknownText}</span>
         </li>
         <li className="details__property">
-          <span>Active to:</span>
-          <span>{deleteTags(shipDetails.activeTo) || 'unknown'}</span>
+          <span>{t('activeTo')}</span>
+          <span>{deleteTags(shipDetails.activeTo) || unknownText}</span>
         </li>
         <li className="details__property">
-          <span>Species:</span>
-          <span>{deleteTags(shipDetails.species) || 'unknown'}</span>
+          <span>{t('species')}</span>
+          <span>{typeof shipDetails.species === 'string' || deleteTags(shipDetails.species?.name || unknownText)}</span>
         </li>
         <li className="details__property">
-          <span>Affiliation:</span>
-          <span>{deleteTags(shipDetails.affiliation) || 'unknown'}</span>
+          <span>{t('affiliation')}</span>
+          <span>{typeof shipDetails.affiliation === 'string' || deleteTags(shipDetails.affiliation?.name || unknownText)}</span>
         </li>
       </ul>
     );
@@ -90,14 +100,14 @@ export const DetailsLayout: React.FC = () => {
 
   return (
     <main className="main">
-      <Outlet />
+      {children}
       <aside className={isDetailsVisible ? 'details details_visible' : 'details'}>
         <div className="details__button" onClick={handleHideDetails}>&#62;</div>
         <div className="details__container">
           <div className="details__header">
-            <div className="details__title">Ship Class</div>
+            <div className="details__title">{t('title')}</div>
             <Button onButtonClick={revalidateQueryCache}>
-              <img src={reset} className={isRotating ? 'rotating' : ''} width="20" height="20" alt="Reset query cache" />
+              <Image src={reset} className={isRotating ? 'rotating' : ''} width="20" height="20" alt="Reset query cache" />
             </Button>
           </div>
           {content}

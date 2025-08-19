@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import { Input } from '../Input/Input';
 import { Button } from '../Button/Button';
 import './Form.scss';
@@ -14,6 +15,8 @@ export const Form: React.FC<FormProps> = ({
   onInputChange,
   onSearch,
 }) => {
+  const t = useTranslations('Header');
+
   return (
     <div className="form">
       <Input
@@ -21,7 +24,7 @@ export const Form: React.FC<FormProps> = ({
         onInputChange={onInputChange}
         onSearch={onSearch}
       />
-      <Button onButtonClick={onSearch}>Search</Button>
+      <Button onButtonClick={onSearch}>{t('searchButton')}</Button>
     </div>
   );
 };

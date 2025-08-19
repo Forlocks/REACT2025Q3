@@ -4,6 +4,10 @@ export interface ShipClass {
   alternateReality: string,
   activeFrom: string,
   activeTo: string,
-  species: string,
-  affiliation: string
+  species: nestedProperty,
+  affiliation: nestedProperty,
+}
+
+interface nestedProperty {
+  name: string;
 }

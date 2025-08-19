@@ -31,12 +31,22 @@
 .header__right-bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
   width: 100%;
+
+  > *:last-child {
+    margin-left: auto;
+  }
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .header__nav-link {
-  margin-left: auto;
   @include vars.text;
   font-size: 24px;
   white-space: nowrap;
@@ -66,5 +76,11 @@
 
   .header__about-us {
     margin-left: 0;
+  }
+
+  .header__right-bar {
+    > *:last-child {
+      margin-left: 0;
+    }
   }
 }
