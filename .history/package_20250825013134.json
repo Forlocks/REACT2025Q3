@@ -11,7 +11,7 @@
     "lint:fix": "eslint \"src/**/*.{tsx,ts}\" --fix",
     "prettier": "prettier \"src/**/*.{tsx,ts}\" --check",
     "format:fix": "prettier \"src/**/*.{tsx,ts}\" --write",
-    "prepare": "husky && echo npm run lint-staged > .husky/pre-commit",
+    "prepare": "husky && echo npm run lint-staged > .husky/pre-commit && echo npm run test > .husky/pre-push",
     "lint-staged": "lint-staged",
     "test": "vitest",
     "test:coverage": "vitest run --coverage"
