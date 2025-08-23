@@ -1,0 +1,22 @@
+@use '../../variables.scss' as vars;
+
+.modal-registration {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: vars.$gray;
+  padding: 10px;
+  border: 5px solid vars.$aqua;
+  border-radius: 10px;
+  width: 500px;
+  z-index: 10;
+}
+
+.modal-registration__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}

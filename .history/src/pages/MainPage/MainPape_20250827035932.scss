@@ -1,0 +1,16 @@
+@use '../../variables.scss' as vars;
+
+.main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100vh;
+    width: 100%;
+}
+
+.main__title {
+    font-size: 2rem;
+    color: vars.$color-text-primary;
+    text-align: center;
+    margin: 1rem 0;
+}
