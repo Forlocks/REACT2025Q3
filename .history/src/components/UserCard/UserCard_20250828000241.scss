@@ -1,0 +1,76 @@
+@use '../../variables.scss' as vars;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  border: 5px solid vars.$aqua;
+  border-radius: 10px;
+  background-color: vars.$gray;
+  transform: translateY(0px);
+  transition: transform 0.5s ease;
+}
+
+.card--new {
+  box-shadow: 0px 10px 15px vars.$aqua;
+}
+
+.card__title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 8px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: vars.$aqua-focus;
+}
+
+.card__name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 40px;
+  @include vars.title-text;
+  font-size: 32px;
+  color: vars.$aqua;
+  text-align: center;
+}
+
+.card__description {
+  display: flex;
+  flex-direction: column;
+}
+
+.card__property {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  min-height: 40px;
+  padding: 0px 8px;
+  border-top: 5px solid vars.$gray-focus;
+  @include vars.text;
+  font-size: 24px;
+
+  :first-child{
+    display: flex;
+    width: 50%;
+  }
+
+  :last-child {
+    display: flex;
+    justify-content: flex-end;
+    width: 50%;
+    padding: 8px;
+    text-align: end;
+  }
+}
+
+.card__property span {
+  width: 100px;
+  white-space: nowrap;       /* не переносим текст */
+  overflow: hidden;          /* обрезаем всё, что не влезло */
+  text-overflow: ellipsis;
+}

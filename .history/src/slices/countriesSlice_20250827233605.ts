@@ -1,0 +1,1 @@
+export const selectAllRegisteredUsers = (state: RootState) => state.registeredUser.registeredUsers;
