@@ -1,0 +1,21 @@
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+
+interface CountriesState {
+  countries: string[];
+}
+
+const initialState: CountriesState = {
+  countries: ['USA', 'Russia', 'Canada', 'Belarus'],
+};
+
+export const countriesSlice = createSlice({
+  name: 'countries',
+  initialState,
+  reducers: {},
+});
+
+// Селектор
+export const selectAllCountries = (state: RootState) => state.countries.countries;
+
+export default countriesSlice.reducer;
