@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import { Card } from '../Card/Card';
 import { Ship } from '../../models/Ship';
 import { deleteTags } from '../../controllers/deleteTags/deleteTags';
@@ -9,18 +10,21 @@ interface CardsContainerProps {
 }
 
 export const CardsContainer: React.FC<CardsContainerProps> = ({ ships }) => {
+  const t = useTranslations('Card');
+  const unknownText = t('unknown');
+
   const cards = ships.map((ship) => (
     <Card
       key={ship.uid}
       uid={ship.uid}
       classId={ship.spacecraftClass?.uid}
-      name={deleteTags(ship.name) || 'unknown'}
-      registry={deleteTags(ship.registry) || 'unknown'}
-      status={deleteTags(ship.status) || 'unknown'}
-      dateStatus={deleteTags(ship.dateStatus) || 'unknown'}
-      shipClass={deleteTags(ship.spacecraftClass?.name) || 'unknown'}
-      owner={deleteTags(ship.owner?.name) || 'unknown'}
-      operator={deleteTags(ship.operator?.name) || 'unknown'}
+      name={deleteTags(ship.name) || unknownText}
+      registry={deleteTags(ship.registry) || unknownText}
+      status={deleteTags(ship.status) || unknownText}
+      dateStatus={deleteTags(ship.dateStatus) || unknownText}
+      shipClass={deleteTags(ship.spacecraftClass?.name) || unknownText}
+      owner={deleteTags(ship.owner?.name) || unknownText}
+      operator={deleteTags(ship.operator?.name) || unknownText}
     />
   ));
 

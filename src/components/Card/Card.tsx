@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCard, removeCard, selectAllSelectedCards } from '../../slices/selectedCardsSlice';
 import { RootState } from '../../store';
@@ -29,16 +32,19 @@ export const Card: React.FC<CardProps> = ({
   owner,
   operator,
 }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const dispatch = useDispatch();
   const selectedCards = useSelector((state: RootState) => selectAllSelectedCards(state));
+  const t = useTranslations('Card');
+
   const isSelected = selectedCards.some(card => card.uid === uid);
 
   const handleClick = () => {
-    const newSearchParams = new URLSearchParams(searchParams);
-
+    const newSearchParams = new URLSearchParams(searchParams?.toString());
     newSearchParams.set('details', classId || 'empty');
-    setSearchParams(newSearchParams);
+
+    router.push(`?${newSearchParams.toString()}`);
   }
 
   const handleCheckboxClick = (event: React.MouseEvent) => {
@@ -70,27 +76,27 @@ export const Card: React.FC<CardProps> = ({
       </div>
       <ul className="card__description">
         <li className="card__property">
-          <span>Registry:</span>
+          <span>{t('registry')}</span>
           <span>{registry}</span>
         </li>
         <li className="card__property">
-          <span>Status:</span>
+          <span>{t('status')}</span>
           <span>{status}</span>
         </li>
         <li className="card__property">
-          <span>Date status:</span>
+          <span>{t('dateStatus')}</span>
           <span>{dateStatus}</span>
         </li>
         <li className="card__property">
-          <span>Class:</span>
+          <span>{t('shipClass')}</span>
           <span>{shipClass}</span>
         </li>
         <li className="card__property">
-          <span>Owner:</span>
+          <span>{t('owner')}</span>
           <span>{owner}</span>
         </li>
         <li className="card__property">
-          <span>Operator:</span>
+          <span>{t('operator')}</span>
           <span>{operator}</span>
         </li>
       </ul>

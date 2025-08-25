@@ -1,5 +1,9 @@
+'use client';
+
 import React from 'react';
-import { useParams, useLocation, Navigate, Routes, Route } from 'react-router-dom';
+import Image from 'next/image';
+import { notFound, useParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useShipLoader } from '../../hooks/useShipLoader/useShipLoader';
 import { DetailsLayout } from '../../layouts/DetailsLayout/DetailsLayout';
 import { SelectedPanelLayout } from '../../layouts/SelectedPanelLayout/SelectedPanelLayout';
@@ -7,13 +11,13 @@ import { Header } from '../../components/Header/Header';
 import { Form } from '../../components/Form/Form';
 import { CardsContainer } from '../../components/CardsContainer/CardsContainer';
 import { Pagination } from '../../components/Pagination/Pagination';
-import { NotFoundPage } from '../NotFoundPage/NotFoundPage';
 import './MainPage.scss';
 import spinner from '../../assets/images/spinner.webp';
 
 export const MainPage: React.FC = () => {
-  const { page } = useParams<{ page: string }>();
-  const currentPage = page ? +page : 1;
+  const params = useParams<{ locale: string; page: string }>();
+  const currentPage = params?.page ? +params.page : 1;
+  const t = useTranslations('MainPage');
 
   const {
     inputValue,
@@ -27,15 +31,15 @@ export const MainPage: React.FC = () => {
     pageCount,
   } = useShipLoader(currentPage);
 
-  const location = useLocation();
-  const pathParts = location.pathname.split('/').filter(Boolean);
+  const router = useRouter();
 
-  if (isNaN(currentPage) || (pathParts.length > 1)) {
-    return <NotFoundPage />;
+  if (isNaN(currentPage)) {
+    notFound();
   }
 
-  if (!page) {
-    return <Navigate to="/1" replace />;
+  if (!params?.page) {
+    router.replace('/1');
+    return;
   }
 
   let content;
@@ -43,7 +47,7 @@ export const MainPage: React.FC = () => {
   if (isLoading || isFetching) {
     content = (
       <div className="main__spinner">
-        <img src={spinner} alt="Loading spinner" />
+        <Image src={spinner} alt="Loading spinner" />
       </div>
     );
   } else if (isError) {
@@ -52,12 +56,12 @@ export const MainPage: React.FC = () => {
         {
           error && ('status' in error)
             ? `Error: ${error.status} — ${(error.data as { message?: string })?.message}`
-            : 'An unknown error occurred'
+            : t('error')
         }
       </div>
     );
   } else if (ships.length === 0) {
-    content = <div className="main__error-message">No results found</div>;
+    content = <div className="main__error-message">{t('noResults')}</div>;
   } else {
     content = <CardsContainer ships={ships} />;
   }
@@ -71,13 +75,11 @@ export const MainPage: React.FC = () => {
           onSearch={() => handleSearch()}
         />
       </Header>
-      <Routes>
-        <Route path="/" element={<DetailsLayout />}>
-          <Route element={<SelectedPanelLayout />}>
-            <Route index element={content} />
-          </Route>
-        </Route>
-      </Routes>
+      <DetailsLayout>
+        <SelectedPanelLayout>
+          {content}
+        </SelectedPanelLayout>
+      </DetailsLayout>
       <Pagination pageCount={pageCount} />
     </div>
   );

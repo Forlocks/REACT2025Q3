@@ -1,12 +1,15 @@
+'use client';
+
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useGetShipClassQuery } from "../../api/shipClassApi";
 
 export function useShipClassLoader() {
   const [isDetailsVisible, setIsDetailsVisible] = useState(false);
   const [isEmptyDetails, setIsEmptyDetails] = useState(true);
-  const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState('');
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const { data, error, isError, isLoading,  isFetching } = useGetShipClassQuery(
     { uid: query },
@@ -15,7 +18,7 @@ export function useShipClassLoader() {
 
   useEffect(() => {
     async function toggleDetails() {
-      const detailsParameter = searchParams.get('details');
+      const detailsParameter = searchParams?.get('details');
 
       setIsDetailsVisible(!!detailsParameter);
 
@@ -45,10 +48,10 @@ export function useShipClassLoader() {
   };
 
   const handleHideDetails = () => {
-    const newSearchParams = new URLSearchParams(searchParams);
-
+    const newSearchParams = new URLSearchParams(searchParams?.toString());
     newSearchParams.delete('details');
-    setSearchParams(newSearchParams);
+
+    router.replace(`?${newSearchParams.toString()}`);
 
     setIsDetailsVisible(false);
   }

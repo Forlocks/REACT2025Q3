@@ -1,7 +1,10 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { Button } from '../Button/Button';
 import './Pagination.scss';
-import { Link, useLocation, useParams } from 'react-router-dom';
 
 interface PaginationProps {
   pageCount: number;
@@ -10,9 +13,8 @@ interface PaginationProps {
 export const Pagination: React.FC<PaginationProps> = ({ pageCount }) => {
   const [isPaginationVisible, setIsPaginationVisible] = useState(!!pageCount);
   const [visiblePages, setVisiblePages] = useState<number[]>([]);
-  const { page } = useParams<{page: string}>();
-  const location = useLocation();
-  const currentPage = page ? +page : 1;
+  const params = useParams<{ locale: string; page: string }>();
+  const currentPage = params?.page ? +params?.page : 1;
 
   useEffect(() => {
     if (currentPage < 1 || (currentPage > pageCount && pageCount !== 0)) {
@@ -24,11 +26,6 @@ export const Pagination: React.FC<PaginationProps> = ({ pageCount }) => {
 
     if (pageCount <= 4) {
       setVisiblePages(Array.from({ length: pageCount }, (_, i) => i + 1));
-      return;
-    }
-
-    if (!location.state?.fromPagination) {
-      setVisiblePages(Array.from({ length: 4 }, (_, i) => currentPage + i));
       return;
     }
     
@@ -45,7 +42,7 @@ export const Pagination: React.FC<PaginationProps> = ({ pageCount }) => {
 
       return newVisiblePages;
     });
-  }, [pageCount, currentPage, location]);
+  }, [pageCount, currentPage]);
 
   if (!isPaginationVisible) {
     return <footer className="pagination"></footer>;
@@ -53,21 +50,21 @@ export const Pagination: React.FC<PaginationProps> = ({ pageCount }) => {
 
   return (
     <footer className="pagination">
-      <Link to={`/${currentPage - 1}`} state={{ fromPagination: true }}>
+      <Link href={`/${currentPage - 1}`}>
         <Button isDisabled={currentPage === 1}>
           &#60;
         </Button>
       </Link>
       <div className="pagination__pages">
         {visiblePages.map(pageNumber => (
-          <Link key={pageNumber} to={`/${pageNumber}`} state={{ fromPagination: true }}>
+          <Link key={pageNumber} href={`/${pageNumber}`}>
             <Button isCurrentButton={pageNumber === currentPage}>
               {pageNumber}
             </Button>
           </Link>
         ))}
       </div>
-      <Link to={`/${currentPage + 1}`} state={{ fromPagination: true }}>
+      <Link href={`/${currentPage + 1}`}>
         <Button isDisabled={currentPage === pageCount}>
           &#62;
         </Button>

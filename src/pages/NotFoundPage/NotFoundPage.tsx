@@ -1,19 +1,23 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import './NotFoundPage.scss';
 import brokenShip from '../../assets/images/not-found.webp';
 
 export const NotFoundPage: React.FC = () => {
+  const t = useTranslations('NotFoundPage');
+
   return (
     <div className="not-found">
-      <img className="not-found__image" src={brokenShip} alt="Broken ship" />
+      <Image className="not-found__image" src={brokenShip} alt="Broken ship" />
       <div className="not-found__title">
-        404 Page not found
+        {t('title')}
         <br />
         <div>
-          You can return to the&nbsp;
-          <Link to="/" className="not-found__link">
-            main page
+          {t('message')}&nbsp;
+          <Link href="/" className="not-found__link">
+            {t('link')}
           </Link>
         </div>
       </div>

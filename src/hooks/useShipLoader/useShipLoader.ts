@@ -1,11 +1,13 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useGetShipsQuery } from "../../api/shipsApi";
 
 export function useShipLoader(currentPage: number) {
   const [inputValue, setInputValue] = useState('');
   const [query, setQuery] = useState('');
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const lastRequest = localStorage.getItem('STS last request') || '';
@@ -22,7 +24,7 @@ export function useShipLoader(currentPage: number) {
   const handleSearch = (searchValue: string = inputValue) => {
     localStorage.setItem('STS last request', searchValue);
 
-    navigate('/1');
+    router.push('/1');
     setQuery(searchValue.trim());
   };
 
