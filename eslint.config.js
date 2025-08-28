@@ -35,7 +35,6 @@ export default tseslint.config(
       "react-compiler/react-compiler": "error",
       ...react.configs.recommended.rules,
       ...react.configs["jsx-runtime"].rules,
-      "react-refresh/only-export-components": "off"
     },
     settings: {
       react: {

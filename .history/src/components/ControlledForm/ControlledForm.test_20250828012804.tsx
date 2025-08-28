@@ -1,0 +1,105 @@
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { ControlledForm } from './ControlledForm';
+import countriesReducer from '../../slices/countriesSlice';
+
+// Mock FileReader
+global.FileReader = vi.fn().mockImplementation(function() {
+  this.readAsDataURL = vi.fn();
+  this.result = 'data:image/jpeg;base64,mock';
+  this.onloadend = null;
+});
+
+// Mock Button component
+vi.mock('../../components/Button/Button', () => ({
+  Button: ({ children, isDisabled, ...props }: any) => (
+    <button disabled={isDisabled} {...props}>
+      {children}
+    </button>
+  ),
+}));
+
+describe('ControlledForm', () => {
+  const mockOnClose = vi.fn();
+  
+  const createStore = () => configureStore({
+    reducer: {
+      country: countriesReducer,
+    },
+    preloadedState: {
+      country: {
+        countries: ['USA', 'Russia', 'Canada'],
+      },
+    },
+  });
+
+  it('renders form fields', () => {
+    render(
+      <Provider store={createStore()}>
+        <ControlledForm onClose={mockOnClose} />
+      </Provider>
+    );
+
+    expect(screen.getByPlaceholderText('Name')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Country')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
+    expect(screen.getByText('Submit')).toBeInTheDocument();
+  });
+
+  it('shows validation errors', async () => {
+    render(
+      <Provider store={createStore()}>
+        <ControlledForm onClose={mockOnClose} />
+      </Provider>
+    );
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(screen.getByText(/name is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/email is required/i)).toBeInTheDocument();
+    });
+  });
+
+  it('submits valid form', async () => {
+    render(
+      <Provider store={createStore()}>
+        <ControlledForm onClose={mockOnClose} />
+      </Provider>
+    );
+
+    // Mock file input
+    const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
+    const fileInput = screen.getByLabelText(/photo/i);
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    // Fill other fields
+    fireEvent.change(screen.getByPlaceholderText('Name'), { 
+      target: { value: 'John Doe' } 
+    });
+    fireEvent.change(screen.getByPlaceholderText('Country'), { 
+      target: { value: 'USA' } 
+    });
+    fireEvent.change(screen.getByPlaceholderText('Age'), { 
+      target: { value: '25' } 
+    });
+    fireEvent.change(screen.getByPlaceholderText('Email'), { 
+      target: { value: 'john@test.com' } 
+    });
+    fireEvent.change(screen.getByPlaceholderText('Password'), { 
+      target: { value: 'Password123!' } 
+    });
+    fireEvent.change(screen.getByPlaceholderText('Confirm password'), { 
+      target: { value: 'Password123!' } 
+    });
+    fireEvent.click(screen.getByLabelText(/i agree to the terms/i));
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(mockOnClose).toHaveBeenCalled();
+    });
+  });
+});
