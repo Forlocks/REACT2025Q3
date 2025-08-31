@@ -12,7 +12,7 @@
     "prettier": "prettier \"src/**/*.{tsx,ts}\" --check",
     "format:fix": "prettier \"src/**/*.{tsx,ts}\" --write",
     "prepare": "husky && echo npm run lint-staged > .husky/pre-commit",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
