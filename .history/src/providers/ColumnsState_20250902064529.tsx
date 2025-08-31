@@ -1,0 +1,25 @@
+import React, { useState } from 'react';
+import { ColumnsContext } from '../context/ColumnsContext';
+import { Columns } from '../context/ColumnsContext';
+
+interface ColumnsProps {
+  children?: React.ReactNode;
+}
+
+export const ColumnsState: React.FC<ColumnsProps> = ({ children }) => {
+  const [columns, setColumns] = useState<ColumnsState>({
+    cementCo2: false,
+    cementCo2PerCapita: false,
+    cumulativeCementCo2: false,
+    methane: false,
+    methanePerCapita: false,
+    nitrousOxidePerCapita: false,
+    nitrousOxide: false,
+  });
+
+  return (
+    <ColumnsContext.Provider value={[ columns, setColumns ]}>
+      {children}
+    </ColumnsContext.Provider>
+  );
+};
