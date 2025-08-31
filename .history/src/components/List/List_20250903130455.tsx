@@ -14,16 +14,6 @@ interface ListProps {
   sortOrder: string;
 }
 
-function onRender(
-  id: string,
-  phase: string,
-  actualDuration: number,
-  baseDuration: number,
-  startTime: number,
-  commitTime: number
-) {
-  console.log(id, phase, actualDuration, baseDuration, startTime, commitTime);
-}
 
 const emissionPromise = getEmissions();
 

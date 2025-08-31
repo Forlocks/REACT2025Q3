@@ -1,4 +1,4 @@
-import { use, Profiler } from 'react';
+import { use } from 'react';
 import React, { useMemo } from 'react';
 import { getColumnDisplayName } from '../../controllers/getColumnDisplayName';
 import { getEmissions } from '../../controllers/getEmissions';
@@ -14,16 +14,6 @@ interface ListProps {
   sortOrder: string;
 }
 
-function onRender(
-  id: string,
-  phase: string,
-  actualDuration: number,
-  baseDuration: number,
-  startTime: number,
-  commitTime: number
-) {
-  console.log(id, phase, actualDuration, baseDuration, startTime, commitTime);
-}
 
 const emissionPromise = getEmissions();
 
@@ -84,7 +74,6 @@ export const List: React.FC<ListProps> = ({
   );
 
   return (
-    <Profiler id="CountriesList" onRender={onRender}>
       <table>
         <thead>
           <tr>
@@ -125,6 +114,5 @@ export const List: React.FC<ListProps> = ({
           })}
         </tbody>
       </table>
-    </Profiler>
   );
 };

@@ -8,9 +8,10 @@ import spinner from './assets/images/spinner.webp';
 const rootContainer = document.getElementById('root') as HTMLElement;
 
 ReactDOM.createRoot(rootContainer).render(
-    <Suspense fallback={<div className="spinner"><img src={spinner} alt="Loading spinner" /></div>}>
-      <ColumnsState>
-        <MainPage />
-      </ColumnsState>
-    </Suspense>
+  import { Profiler } from 'react';
+  <Suspense fallback={<div className="spinner"><img src={spinner} alt="Loading spinner" /></div>}>
+    <ColumnsState>
+      <MainPage />
+    </ColumnsState>
+  </Suspense>
 );

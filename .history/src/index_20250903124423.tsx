@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, Profiler } from 'react';
 import ReactDOM from 'react-dom/client';
 import { ColumnsState } from './providers/ColumnsState';
 import { MainPage } from './pages/MainPage/MainPage';
@@ -13,4 +13,5 @@ ReactDOM.createRoot(rootContainer).render(
         <MainPage />
       </ColumnsState>
     </Suspense>
+  </Profiler>
 );

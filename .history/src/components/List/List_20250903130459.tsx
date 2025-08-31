@@ -14,16 +14,6 @@ interface ListProps {
   sortOrder: string;
 }
 
-function onRender(
-  id: string,
-  phase: string,
-  actualDuration: number,
-  baseDuration: number,
-  startTime: number,
-  commitTime: number
-) {
-  console.log(id, phase, actualDuration, baseDuration, startTime, commitTime);
-}
 
 const emissionPromise = getEmissions();
 
@@ -84,7 +74,6 @@ export const List: React.FC<ListProps> = ({
   );
 
   return (
-    <Profiler id="CountriesList" onRender={onRender}>
       <table>
         <thead>
           <tr>

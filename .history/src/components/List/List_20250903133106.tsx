@@ -1,4 +1,4 @@
-import { use, Profiler } from 'react';
+import { use } from 'react';
 import React, { useMemo } from 'react';
 import { getColumnDisplayName } from '../../controllers/getColumnDisplayName';
 import { getEmissions } from '../../controllers/getEmissions';
@@ -14,17 +14,6 @@ interface ListProps {
   sortOrder: string;
 }
 
-function onRender(
-  id: string,
-  phase: string,
-  actualDuration: number,
-  baseDuration: number,
-  startTime: number,
-  commitTime: number
-) {
-  console.log(id, phase, actualDuration, baseDuration, startTime, commitTime);
-}
-
 const emissionPromise = getEmissions();
 
 export const List: React.FC<ListProps> = ({
@@ -34,15 +23,17 @@ export const List: React.FC<ListProps> = ({
   sortAttribute,
   sortOrder,
 }) => {
+  const PLACEHOLDER_TEXT = 'N/A';
   const emissions = use(emissionPromise);
 
-  const PLACEHOLDER_TEXT = 'N/A';
-
+  // 🔹 Поиск + фильтрация + сортировка через useMemo
   const processedEmissions = useMemo(() => {
     const entries = Object.entries(emissions)
+      // поиск по названию страны
       .filter(([countryName]) =>
         countryName.toLowerCase().includes(country.toLowerCase())
       )
+      // сортировка
       .sort(([aName, aData], [bName, bData]) => {
         const aDataTyped = aData as Countries[string];
         const bDataTyped = bData as Countries[string];
@@ -78,53 +69,52 @@ export const List: React.FC<ListProps> = ({
     return Object.fromEntries(entries) as Countries;
   }, [emissions, country, year, sortAttribute, sortOrder]);
 
-  const processedAdditionColumns = useMemo(
+  // 🔹 Запоминание выбранных колонок
+  const visibleColumns = useMemo(
     () => additionColumns.map(id => ({ id, name: getColumnDisplayName(id) })),
     [additionColumns]
   );
 
   return (
-    <Profiler id="CountriesList" onRender={onRender}>
-      <table>
-        <thead>
-          <tr>
-            <th>Country</th>
-            <th>Iso code</th>
-            <th>Year</th>
-            <th>Population</th>
-            <th>Co2</th>
-            <th>Co2 per capita</th>
-            {processedAdditionColumns.map(column => (
-              <th key={column.id}>{column.name}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {Object.entries(processedEmissions).map(([countryName, countryData]) => {
-            const countryAttributes = countryData.data.find(
-              (item: EmissionAttributes) => item.year === year
-            );
+    <table>
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th>Iso code</th>
+          <th>Year</th>
+          <th>Population</th>
+          <th>Co2</th>
+          <th>Co2 per capita</th>
+          {visibleColumns.map(col => (
+            <th key={col.id}>{col.name}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {Object.entries(processedEmissions).map(([countryName, countryData]) => {
+          const countryAttributes = countryData.data.find(
+            (item: EmissionAttributes) => item.year === year
+          );
 
-            if (!countryAttributes) {
-              return null;
-            }
+          if (!countryAttributes) {
+            return null;
+          }
 
-            return (
-              <tr key={countryName}>
-                <td>{countryName}</td>
-                <td>{countryData.iso_code ?? PLACEHOLDER_TEXT}</td>
-                <td>{countryAttributes.year}</td>
-                <td>{countryAttributes.population ?? PLACEHOLDER_TEXT}</td>
-                <td>{formatNumber(countryAttributes.co2)}</td>
-                <td>{formatNumber(countryAttributes.co2_per_capita)}</td>
-                {processedAdditionColumns.map(col => (
-                  <td key={col.id}>{formatNumber(countryAttributes[col.id])}</td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </Profiler>
+          return (
+            <tr key={countryName}>
+              <td>{countryName}</td>
+              <td>{countryData.iso_code ?? PLACEHOLDER_TEXT}</td>
+              <td>{countryAttributes.year}</td>
+              <td>{countryAttributes.population ?? PLACEHOLDER_TEXT}</td>
+              <td>{formatNumber(countryAttributes.co2)}</td>
+              <td>{formatNumber(countryAttributes.co2_per_capita)}</td>
+              {visibleColumns.map(col => (
+                <td key={col.id}>{formatNumber(countryAttributes[col.id])}</td>
+              ))}
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 };

@@ -86,45 +86,45 @@ export const List: React.FC<ListProps> = ({
   return (
     <Profiler id="CountriesList" onRender={onRender}>
       <table>
-        <thead>
-          <tr>
-            <th>Country</th>
-            <th>Iso code</th>
-            <th>Year</th>
-            <th>Population</th>
-            <th>Co2</th>
-            <th>Co2 per capita</th>
-            {processedAdditionColumns.map(column => (
-              <th key={column.id}>{column.name}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {Object.entries(processedEmissions).map(([countryName, countryData]) => {
-            const countryAttributes = countryData.data.find(
-              (item: EmissionAttributes) => item.year === year
-            );
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th>Iso code</th>
+          <th>Year</th>
+          <th>Population</th>
+          <th>Co2</th>
+          <th>Co2 per capita</th>
+          {processedAdditionColumns.map(column => (
+            <th key={column.id}>{column.name}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {Object.entries(processedEmissions).map(([countryName, countryData]) => {
+          const countryAttributes = countryData.data.find(
+            (item: EmissionAttributes) => item.year === year
+          );
 
-            if (!countryAttributes) {
-              return null;
-            }
+          if (!countryAttributes) {
+            return null;
+          }
 
-            return (
-              <tr key={countryName}>
-                <td>{countryName}</td>
-                <td>{countryData.iso_code ?? PLACEHOLDER_TEXT}</td>
-                <td>{countryAttributes.year}</td>
-                <td>{countryAttributes.population ?? PLACEHOLDER_TEXT}</td>
-                <td>{formatNumber(countryAttributes.co2)}</td>
-                <td>{formatNumber(countryAttributes.co2_per_capita)}</td>
-                {processedAdditionColumns.map(col => (
-                  <td key={col.id}>{formatNumber(countryAttributes[col.id])}</td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+          return (
+            <tr key={countryName}>
+              <td>{countryName}</td>
+              <td>{countryData.iso_code ?? PLACEHOLDER_TEXT}</td>
+              <td>{countryAttributes.year}</td>
+              <td>{countryAttributes.population ?? PLACEHOLDER_TEXT}</td>
+              <td>{formatNumber(countryAttributes.co2)}</td>
+              <td>{formatNumber(countryAttributes.co2_per_capita)}</td>
+              {processedAdditionColumns.map(col => (
+                <td key={col.id}>{formatNumber(countryAttributes[col.id])}</td>
+              ))}
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
     </Profiler>
   );
 };
