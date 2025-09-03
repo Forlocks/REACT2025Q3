@@ -1,0 +1,76 @@
+import React, { useEffect, useState } from 'react';
+import { getColumnDisplayName } from '../../controllers/getColumnDisplayName';
+import './List.scss';
+import { getEmissions } from '../../controllers/getEmissions';
+
+interface ListProps {
+  additionColumns: string[];
+}
+
+export const List:React.FC<ListProps> = ({additionColumns}) => {
+  const [data, setData] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const emissions = await getEmissions();
+        console.log(emissions);
+        setData(emissions);
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th>Iso code</th>
+          <th>Year</th>
+          <th>Population</th>
+          <th>Co2</th>
+          <th>Co2 per capita</th>
+          {additionColumns.map(col => (
+            <th key={col}>{getColumnDisplayName(col)}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((row, index) => (
+          <tr key={index}>
+            <td>{row.country}</td>
+            <td>{row.year}</td>
+            <td>{row.population}</td>
+            <td>{row.co2}</td>
+
+            {additionColumns.map(col => (
+              <td key={col}>{row[col]}</td>
+            ))}
+          </tr>
+        ))}
+        <tr>
+          <td>1</td>
+          <td>9.1</td>
+          <td>Зелёная миля</td>
+          <td>1999</td>
+          <td>Same same</td>
+          <td>Same same</td>
+          <td>Same same</td>
+          <td>Same same</td>
+          <td>Same same</td>
+          <td>Same same</td>
+          <td>Same same</td>
+          <td>Same same</td>
+          <td>Same same</td>
+        </tr>
+      </tbody>
+    </table>
+  )
+};
